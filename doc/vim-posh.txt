@@ -1,0 +1,177 @@
+*posh.txt*              PowerShell Filetype Support for Vim/Neovim          *vim-posh*
+
+==============================================================================
+NAME
+    vim-posh — Enhanced PowerShell filetype support (posh) for Vim/Neovim.
+
+DESCRIPTION
+    vim-posh provides a rich editing environment for PowerShell scripts,
+    modules, formatting files (*.ps1xml), class- and enum-based types, and
+    embedded ScriptBlocks inside XML.
+
+FEATURES
+    Syntax:
+        • Comprehensive PowerShell token highlighting
+        • Reserved keyword highlighting (`poshReservedKeyword`)
+        • Accurate cmdlet highlighting (`Verb-Noun`)
+        • Full support for scoped variables ($global:, $script:, …)
+        • Support for braced variables ${my variable name}
+        • Embedded PowerShell inside <ScriptBlock> regions in .ps1xml
+
+    XML Integration:
+        • Full XML syntax included for .ps1xml
+        • Tag/attribute awareness for PowerShell formatting schema
+        • Folding for View, TableControl, ListControl, MemberSet
+
+    Folding:
+        Syntax-driven folds for:
+            • #region / #endregion
+            • param ( ... )
+            • function Foo { ... }
+            • class Foo { ... }
+            • enum Foo { ... }
+            • switch (...) { ... } (optional case folding included)
+            • try { ... }, catch { ... }, finally { ... }
+            • Comment-Based Help (CBH) blocks (<# ... #>)
+            • Generic braces
+
+    Indentation:
+        • PowerShell-specific indentation rules for script files
+        • XML indentation used automatically for .ps1xml buffers
+
+    Comments:
+        • PowerShell-style commentstring (`# %s`)
+        • XML commentstring (`<!-- %s -->`) for ps1xml
+        • CBH highlighting + keyword extraction
+
+    Configuration:
+        g:posh_use_legacy_doccomments = {0,1}
+            0 → <## … ##> is treated as a doc comment
+            1 → <# … #> is treated as a doc comment
+
+        g:posh_shiftwidth = N
+            Overrides the default indentation width
+
+        g:posh_fold_cbh_all = {0,1}
+            1 → Fold any block comment
+            0 → Fold only documentation comments
+
+        g:posh_fold_cbh_only_with_keywords = {0,1}
+            1 → Fold CBH blocks only if a CBH keyword is present
+
+FILES
+    ftdetect/posh.vim
+        Declares *.ps1, *.psm1, *.ps1xml, etc., as filetype "posh".
+
+    ftplugin/posh.vim
+        Buffer-local settings, commentstring behavior, foldtext function,
+        formatter integration, indent-width override.
+
+    syntax/posh.vim
+        All syntax highlighting, XML embedding, folding rules, tokenization,
+        CBH keyword support, scoped/braced variable parsing.
+
+    indent/posh.vim
+        Script indentation logic; XML indent delegated to Vim's xml.vim.
+
+INSTALLATION
+    Place the vim-posh directory in:
+
+        ~/.vim/pack/posh/start/vim-posh/
+        or
+        ~/.local/share/nvim/site/pack/posh/start/vim-posh/
+        or
+        %USERPROFILE%\vimfiles\pack\posh\start\vim-posh\
+
+    Vim/Neovim will load it automatically.
+
+    Run:
+        :helptags ANY_PATH/doc
+
+REQUIRED: Disabling Vim’s Built‑in PowerShell Syntax                           *posh-disable-ps1*
+
+    Vim ships with a built‑in PowerShell syntax file: >
+        $VIMRUNTIME/syntax/ps1.vim
+<
+    This file is automatically loaded whenever Vim detects that a buffer
+    is related to the "ps1" filetype. Because the posh plugin defines a new
+    and expanded PowerShell filetype ("posh"), some Vim installations still
+    load the built‑in ps1 syntax afterwards as a compatibility fallback. When
+    this happens, the default ps1 syntax overrides large portions of the
+    posh syntax and produces incorrect or inconsistent highlighting.
+
+    To ensure that the posh syntax is the *only* syntax system active for
+    PowerShell buffers, you MUST disable the built‑in ps1 syntax by adding
+    an override file in your personal 'after' directory:
+
+        Create this file:
+            ~/.vim/after/syntax/ps1.vim       (Unix)
+            %USERPROFILE%\vimfiles\after\syntax\ps1.vim    (Windows)
+
+        And put exactly this single line in it: >
+            finish
+<
+
+    This prevents Vim from loading any ps1 syntax definitions from the
+    runtimepath, including those bundled with Vim or with plugins such as
+    vim-polyglot.
+
+    NOTE: This file belongs in *your* after/syntax directory, not inside the
+    plugin. Having ps1‑related files inside a plugin's after/ tree will cause
+    Vim to re‑enable ps1 settings for buffers using the posh filetype, which
+    defeats the purpose of the plugin.
+
+USAGE
+    Editing PowerShell script files (*.ps1, *.psm1, …) automatically loads
+    vim-posh and enables syntax highlighting, indenting, folding, and CBH
+    features.
+
+    Opening PowerShell formatting files (*.ps1xml) provides XML syntax +
+    embedded PowerShell and schema-aware highlighting.
+
+CONFIGURATION
+    g:posh_use_legacy_doccomments
+        Default: 0
+        When set to 1, treat <# ... #> as documentation comments for
+        Comment-Based Help (CBH). When 0 (default), documentation comments
+        use the <## ... ##> style.
+
+    g:posh_fold_cbh_all
+        Default: 0
+        When set to 1, fold all block comments (<# ... #> or <## ... ##>)
+        regardless of whether they contain CBH keywords.
+
+    g:posh_fold_cbh_only_with_keywords
+        Default: 0
+        When set to 1, documentation comment blocks fold only when they
+        contain at least one CBH keyword (such as .SYNOPSIS, .DESCRIPTION,
+        .PARAMETER, etc.).
+
+    g:posh_shiftwidth
+        Default: 4
+        Overrides the indentation width for PowerShell script files. XML
+        files (*.ps1xml) continue to use Vim’s native XML indentation.
+
+    g:posh_collapse_all_folds                    *g:posh_collapse_all_folds*
+        Default: 0
+        Controls the default visibility of folds created by the syntax
+        engine. When 0 (default), all folds are created but opened
+        automatically. When set to 1, all folds are created and collapsed
+        by default. This affects all fold types, including param blocks,
+        functions, classes, enums, switch statements, try/catch/finally,
+        CBH blocks, and major XML semantic regions.
+
+        Example:
+            let g:posh_collapse_all_folds = 1
+
+AUTHOR
+    Craig Shea <fourpastmidnight@hotmail.com>
+
+    vim-posh is maintained for PowerShell developers who want full-language
+    editing support in Vim/Neovim.
+
+LICENSE
+    MIT (recommended; update this if needed)
+
+==============================================================================
+vim-posh                                                              *posh*
