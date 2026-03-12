@@ -126,13 +126,13 @@ hi def link poshBlockComment    Comment
 
 " PowerShell groups allowed inside example code (plus poshComment for code-#)
 syntax cluster poshExampleCode contains=
-      \ poshHereStringD,poshHereStringS,poshStringD,poshStringS,poshConstant,
+      \ poshExHereStringD,poshExHereStringS,poshStringD,poshStringS,poshConstant,
       \ poshBracedVariable,poshScopedVariable,poshNsVariable,poshVariable,
       \ poshOperator,poshCast,poshKeyword,poshReservedKeyword,poshTypeName,
       \ poshCmdlet,poshEscape,poshUnaryBang,poshUnaryOpSign,poshUnaryComma,
-      \ poshRange,poshSlice,poshArraySubExpr, "poshRange,poshSlice,poshParenGroup,poshSubExpr,poshArraySubExpr,
+      \ poshRange,poshSlice,poshArraySubExpr,
       \ poshNumberLit,poshParameter,poshCmdletConventional,poshFunctionHyphen,
-      \ poshFunctionKW,poshFuncName
+      \ poshComment,poshBlockComment
 
 " .EXAMPLE tag (inside doc block); jumps to first non-blank after it
 syntax match poshDocExampleTag /^\s*\.EXAMPLE\>/ contained containedin=poshDocBlockComment nextgroup=poshDocExampleStart skipwhite skipnl
@@ -142,13 +142,91 @@ hi def link poshDocExampleTag SpecialComment
 syntax match poshDocExampleStart /^\s*\ze\S/ contained nextgroup=poshDocExampleCode skipwhite skipnl
 
 " Example CODE region (variant B): first non-blank → first blank line / next CBH / doc end
-syntax region poshDocExampleCode contained keepend
-      \ start=/./
-      \ end=/^\s*$/
-      \ end=/^\s*\.[A-Z]\+\>/
-      \ end=/#>/
-      \ end=/##>/
-      \ contains=@poshExampleCode,poshComment
+syntax region poshDocExampleCode
+    \ start=/./
+    \ end=/^\s*$/
+    \ end=/^\s*\.[A-Z]\+\>/
+    \ end=/#>/
+    \ end=/##>/
+    \ keepend
+    \ contained
+    \ contains=poshComment,poshBlockComment,poshExHereStringD,poshExHereStringS,poshExamplePSLine,poshExampleContinuationLine,poshExampleOutputLine,poshExamplePromptContinuation
+
+" --- PS> command lines: highlight the code AFTER the prompt with normal @poshCode ---
+" Supports either PS> or 'PS <anything> >'
+syntax region poshExamplePSLine
+    \ matchgroup=poshExamplePromptPS
+    \ start=/^\s*PS\%(\s\+[^>]*\)\?>\s*\zs/
+    \ end=/$/
+    \ keepend
+    \ contained
+    \ containedin=ALLBUT,poshExHereStringD,poshExHereStringS
+    \ contains=@poshExampleCode
+
+" --- >> continuation command lines: also highlight like code ---
+syntax region poshExampleContinuationLine
+    \ matchgroup=poshExamplePromptContinuation
+    \ start=/^\s*>>\s*\zs/
+    \ end=/$/
+    \ keepend
+    \ contained
+    \ containedin=ALLBUT,poshExHereStringD,poshExHereStringS
+    \ contains=@poshExampleCode
+
+" --- Example-scoped here-strings ---
+syntax region poshExHereStringD
+    \ start=/@"\s*$/
+    \ end=/^\s*>>\s*"@\s*$/
+    \ keepend
+    \ contained
+    \ containedin=poshDocExampleCode
+    \ contains=@poshStringSpecial,poshExamplePromptPS,poshExamplePromptContinuation,poshExamplePromptContinuationOnly
+
+syntax region poshExHereStringS
+    \ start=/@'\s*$/
+    \ end=/^\s*>>\s*'@\s*$/
+    \ keepend
+    \ contained
+    \ containedin=poshDocExampleCode
+    \ contains=@Spell,poshExamplePromptPS,poshExamplePromptContinuation,poshExamplePromptContinuationOnly
+
+hi def link poshExHereStringD String
+hi def link poshExHereStringS String
+
+syntax cluster poshExStringSpecial contains=
+    \ poshEscape,
+    \ poshBracedVariable,poshScopedVariable,poshNsVariable,poshVariable,
+    \ poshExInterpolation
+
+syntax region poshExInterpolation
+    \ matchgroup=Delimiter
+    \ start=/\$(/ end=/)/
+    \ keepend
+    \ contained
+    \ contains=@poshInterpCode,poshExNestedParentheses,poshExInterpolation
+
+syntax region poshExNestedParentheses
+    \ matchgroup=Delimiter
+    \ start=/(/ end=/)/
+    \ skip=/\\\\\|\\)/
+    \ keepend
+    \ transparent
+    \ contained
+    \ contains=@poshInterpCode,poshExNestedParentheses,poshExInterpolation
+
+" --- Prompt tokens (for styling the PS ...> or >> prefixes) ---
+syntax match poshExamplePromptPS               /^\s*PS\%(\s\+[^>]*\)\?>\s*/ contained containedin=poshDocExampleCode,poshExamplePSLine,poshExHereStringD,poshExHereStringS
+syntax match poshExamplePromptContinuation     /^\s*>>\s/                   contained containedin=poshDocExampleCode,poshExampleContinuationLine,poshExHereStringD,poshExHereStringS
+syntax match poshExamplePromptContinuationOnly /^\s*\zs>>\ze\s*$/           contained containedin=poshExHereStringD,poshExHereStringS contains=NONE
+syntax match poshExampleHereBodyLine           /^\s*>>\s*\S.*$/             contained containedin=poshExHereStringD,poshExHereStringS contains=@poshStringSpecial,poshExamplePromptContinuation
+hi def link poshExamplePromptPS               SpecialComment
+hi def link poshExamplePromptContinuation     SpecialComment
+hi def link poshExamplePromptContinuationOnly SpecialComment
+hi def link poshExampleHereBodyLine           String
+
+" --- Output lines (NOT PS> or >>): show as plain text--no code highlighting ---
+syntax match poshExampleOutputLine /^\s*\%(\%(PS\%(\s\+[^>]*\)\?\|>>\)\)\@!\S.*$/ contained containedin=poshDocExampleCode
+hi def link poshExampleOutputLine Normal
 
 " ----------------------------------------------------------------------------
 " 3) Strings & Here-Strings
@@ -166,8 +244,8 @@ hi def link poshHereStringS  String
 syntax cluster poshInterpCode contains=
     \ poshOperator,poshCast,poshKeyword,poshReservedKeyword,poshConstant,poshTypeName,
     \ poshEscape,poshBracedVariable,poshScopedVariable,poshNsVariable,poshVariable,
-    \ pushArraySubExpr,poshIndex,
-    \ poshStringD,poshSTringS,poshHereStringD,poshHereStringS,
+    \ poshArraySubExpr,poshIndex,
+    \ poshStringD,poshStringS,poshHereStringD,poshHereStringS,
     \ poshNumberLit,poshParameter,poshSplat,poshFunctionHyphen,poshCmdletConventional,
     \ poshCallOp
 
@@ -178,11 +256,11 @@ syntax cluster poshInterpCode contains=
 " interpolation.
 
 " Interpolation region: $(...)
-syntax region poshInterpolation start=/\$(/ end=/)/ matchgroup=poshInterpolationDelimiter contained contains=ALLBUT,@poshNotTop
-hi def link poshInterpolationDelimeter Delimiter
+syntax region poshInterpolation matchgroup=poshInterpolationDelimiter start=/\$(/ end=/)/ contained contains=ALLBUT,@poshNotTop
+hi def link poshInterpolationDelimiter Delimiter
 
 " Parentheses nested inside interpolation (e.g. MethodCall(...))
-syntax region poshNestedParentheses start=/(/ end=/)/ skip=/\\\\\|\\)/ matchgroup=Delimeter keepend transparent contained
+syntax region poshNestedParentheses matchgroup=Delimiter start=/(/ end=/)/ skip=/\\\\\|\\)/ keepend transparent contained
 
 " --- Powell escape sequences (double-quoted contexts) ---
 " Scope: contained - only active in containers that list poshEscape
@@ -208,7 +286,7 @@ hi def link poshEscape SpecialChar
 "   * Multiplier:        kb|mb|gb|tb|pb
 "   * Order:             <number><type?><multiplier?>
 "
-syntax match poshNumberLit /\<\%(0[xX][0-9A-Fa-f]\+\|0[bB][01]\+\|\d\?\.\d\?\%([eE][+-]\?\d\+\)\=\|\d\+[eE][+-]\?\d\+\|\d\+\)\%(uy\|y\|us\|s\|ul\|l\|u\|n\|d\)\?\%([kKmMgGtTpP][bB]\)\?\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,xmlRegion,xmlString,xmlCdata
+syntax match poshNumberLit /\<\%(0[xX][0-9A-Fa-f]\+\|0[bB][01]\+\|\d\?\.\d\?\%([eE][+-]\?\d\+\)\=\|\d\+[eE][+-]\?\d\+\|\d\+\)\%(uy\|y\|us\|s\|ul\|l\|u\|n\|d\)\?\%([kKmMgGtTpP][bB]\)\?\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,xmlRegion,xmlString,xmlCdata
 hi def link poshNumberLit Number
 
 " ----------------------------------------------------------------------------
@@ -250,9 +328,9 @@ hi def link poshVariable       Identifier
 syntax match  poshTypeName "\[[A-Za-z_][A-Za-z0-9_.\[\],]*\]" contains=NONE
 " [Type] cast - highlight only the brackets as operator: inner remains
 " poshTypeName
-syntax region poshCast          start=/\%(^\|\s\|[([{,;|]\)\zs\[/  end=/]/  matchgroup=Type      keepend transparent           contains=poshTypeName containedin=ALLBUT,poshAttribute,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshComment,poshBlockComment,poshDocBlockComment,xmlRegion,xmlString,xmlCdata
-syntax region poshAttribute     start="\%(^\|\s\|[([{,;|]\)\zs\["  end="\]" matchgroup=Delimiter keepend transparent           contains=poshTypeName,poshAttributeArgs
-syntax region poshAttributeArgs start=/(/                          end=/)/  matchgroup=Delimiter keepend transparent contained contains=@poshExampleCode,poshSubExpr,poshParenGroup containedin=poshAttribute
+syntax region poshCast          matchgroup=Type start=/\%(^\|\s\|[([{,;|]\)\zs\[/  end=/]/       keepend transparent           contains=poshTypeName containedin=ALLBUT,poshAttribute,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshComment,poshBlockComment,poshDocBlockComment,xmlRegion,xmlString,xmlCdata
+syntax region poshAttribute     matchgroup=Delimiter start="\%(^\|\s\|[([{,;|]\)\zs\["  end="\]" keepend transparent           contains=poshTypeName,poshAttributeArgs
+syntax region poshAttributeArgs matchgroup=Delimiter start=/(/                          end=/)/  keepend transparent contained contains=@poshExampleCode containedin=poshAttribute
 hi def link   poshTypeName Type
 " TODO: Change this highlighting link for attributes....
 hi def link   poshAttribute PreProc
@@ -310,13 +388,13 @@ hi def link poshCallOp Operator
 " 8) Grouping & Sub-experssion regions
 " ----------------------------------------------------------------------------
 "syntax region poshSubExpr      start=/\$(/ end=/)/ matchgroup=Delimiter keepend transparent contained contains=@poshExampleCode,poshSubExpr containedin=ALLBUT,poshStringD,poshstringS,poshHereStringD,poshHereStringS,poshInterpolation
-syntax region poshArraySubExpr start=/@(/  end=/)/ matchgroup=Delimiter keepend transparent           contains=@poshExampleCode,poshArraySubExpr,poshSubExpr
+syntax region poshArraySubExpr matchgroup=Delimiter start=/@(/  end=/)/ keepend transparent           contains=@poshExampleCode,poshArraySubExpr,poshSubExpr
 "syntax region poshParenGroup   start=/(/   end=/)/ matchgroup=Delimiter keepend transparent           contains=@poshExampleCode,poshParenGroup,poshSubExpr
 
 " ----------------------------------------------------------------------------
 " 9) Indexers
 " ----------------------------------------------------------------------------
-syntax region poshIndex           start=/\%(\k\|\]\|)\|["']\)\s*\zs\[\%(\s*\h\)\@!/ end=/]/ matchgroup=Delimiter keepend transparent       contains=@poshExampleCode,poshSubExpr,poshArraySubExpr containedin=ALLBUT,poshTypeName,poshAttribute,poshCast,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshComment,poshBlockComment,poshDocBlockComment,xmlRegion,xmlString,xmlCdata
+syntax region poshIndex           matchgroup=Delimiter start=/\%(\k\|\]\|)\|["']\)\s*\zs\[\%(\s*\h\)\@!/ end=/]/ keepend transparent       contains=@poshExampleCode,poshSubExpr,poshArraySubExpr containedin=ALLBUT,poshTypeName,poshAttribute,poshCast,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshComment,poshBlockComment,poshDocBlockComment,xmlRegion,xmlString,xmlCdata
 " Indexer operators
 syntax match poshRange /\.\./ contained containedin=poshIndex
 "hi def link poshRange Operator
@@ -359,15 +437,15 @@ hi def link poshFuncScope PreProc
 " -----------------------------------------------------------------------------
 " Conventional cmdlets (those with approved verbs): highlight whole token as
 " Function. Optional prefixes: Module\Name OR Drive:\Name
-execute 'syntax match poshCmdletConventional /\<\%(\h\k*:\\\|\h\k*\\\)\?\%(' . s:approved_verbs . '\)\%(-\k\+\)\+\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs'
+execute 'syntax match poshCmdletConventional /\<\%(\h\k*:\\\|\h\k*\\\)\?\%(' . s:approved_verbs . '\)\%(-\k\+\)\+\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs'
 hi def link poshCmdletConventional Function
 
 " Hyphenated function names (fallback when verb is not in the approved list).
 " These are visually different (Identifier) to flag non-conventional naming.
-syntax match poshFunctionHyphen /\<\%(\h\k*:\\\|\h\k*\\\)\?\k\+\%(-\k\+\)\+\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,postHereStringD,poshHereStringS,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs contains=poshCmdletConventional
+syntax match poshFunctionHyphen /\<\%(\h\k*:\\\|\h\k*\\\)\?\k\+\%(-\k\+\)\+\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,postHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs contains=poshCmdletConventional
 hi def link poshFunctionHyphen Identifier
 
-syntax match poshParameter /\<-\%(-\|%\)\@!\%(\%([ci]\)\?\%(not\)\?\%(eq\|ne\|gt\|ge\|lt\|le\|contains\|in\|like\|match\|replace\|split\|join\|b\?\%(and\|x\?or\)\|bnot\|sh[lr]\|is\%(not\)\?\|as\|f\)\>\)\@!\h\w*\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs,poshFunctionHyphen,poshCmdletConventional skipwhite skipnl
+syntax match poshParameter /\<-\%(-\|%\)\@!\%(\%([ci]\)\?\%(not\)\?\%(eq\|ne\|gt\|ge\|lt\|le\|contains\|in\|like\|match\|replace\|split\|join\|b\?\%(and\|x\?or\)\|bnot\|sh[lr]\|is\%(not\)\?\|as\|f\)\>\)\@!\h\w*\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs contains=poshCmdletConventional
 hi def link poshParameter Identifier
 
 syntax keyword poshKeyword
@@ -375,10 +453,10 @@ syntax keyword poshKeyword
       \ else elseif end enum exit extends filter finally for foreach function
       \ hidden if in param private process protected public return static
       \ switch throw trap try until using where while workflow
-      \ containedin=ALLBUT,poshCast,poshAttribute,poshIndex,poshTypeName,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS
+      \ containedin=ALLBUT,poshCast,poshAttribute,poshIndex,poshTypeName,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS
 hi def link poshKeyword Keyword
 
-syntax keyword poshReservedKeyword case define export from global import namespace containedin=ALLBUT,poshCast,poshAttribute,poshIndex,poshTypeName,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS
+syntax keyword poshReservedKeyword case define export from global import namespace containedin=ALLBUT,poshCast,poshAttribute,poshIndex,poshTypeName,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS
 hi def link poshReservedKeyword Special
 
 " --- Type core word inside [ ... ] (override keywords only in type brackets) ---
