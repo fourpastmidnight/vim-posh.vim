@@ -325,19 +325,19 @@ hi def link   poshAttribute PreProc
 " 7) Operators, Keywords, Reserved Keywords, Types, Cmdlets, Escapes
 " ----------------------------------------------------------------------------
 " Arithmetic operators
-syntax match poshOperator /[-+*%\/]\%(\h\)\@!/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshOperator /[-+*%\/]\%(\h\)\@!/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 " Assignment operators
-syntax match poshOperator /[-+*%\/]\?=/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshOperator /[-+*%\/]\?=/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 " Comparison operators
-syntax match poshOperator /-[ci]\?\%(eq\|ne\|gt\|ge\|lt\|le\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshOperator /-[ci]\?\%(eq\|ne\|gt\|ge\|lt\|le\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 " Containment operators
-syntax match poshOperator /-[ci]\?\%(not\)\?\%(contains\|in\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshOperator /-[ci]\?\%(not\)\?\%(contains\|in\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 " Pattern-matching and text-manipulation operators
-syntax match poshOperator /-\%([ci]\?\%(not\)\?\%(like\|match\|replace\|split\)\|join\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshOperator /-\%([ci]\?\%(not\)\?\%(like\|match\|replace\|split\)\|join\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 " Logical and bitwise operators
-syntax match poshOperator /-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshOperator /-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 " Type operators
-syntax match poshOperator /-\%(is\%(not\)\?\|as\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshOperator /-\%(is\%(not\)\?\|as\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 
 " -----------------------------------------------------------------------------
 "  Unary operators (placed AFTER broad operator matches above so they take
@@ -345,33 +345,34 @@ syntax match poshOperator /-\%(is\%(not\)\?\|as\)\>/ containedin=ALLBUT,poshExHe
 " -----------------------------------------------------------------------------
 " Unary + / - (prefix sign only), allowing numbers, $, quotes, grouping (,
 " casts [, and here-strings (@" / @') - but NOT array subexpressions (@(...)).
-syntax match poshUnaryOpSign /\%(^\|[([{;,|=?:]\)\s*\zs[+-]\ze\s*\%(\d\|\$\|["']\|(\|\[\|@\%(["']\)\)/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshUnaryOpSign /\%(^\|[([{;,|=?:]\)\s*\zs[+-]\ze\s*\%(\d\|\$\|["']\|(\|\[\|@\%(["']\)\)/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 hi def link poshUnaryOpSign Operator
 " Unary ! operator
-syntax match poshUnaryBang /\%(^\|[([{;,|=?:]\)\s*\zs!\ze\s*\S/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshUnaryBang /\%(^\|[([{;,|=?:]\)\s*\zs!\ze\s*\S/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 hi def link poshUnaryBang Operator
 " Unary comma at expression start (array construction)
-syntax match poshUnaryComma /\%(^\|[([{;,|=?:]\)\s*\zs,\ze\s*\S/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshUnaryComma /\%(^\|[([{;,|=?:]\)\s*\zs,\ze\s*\S/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 hi def link poshUnaryComma Operator
 " Increment / Decrement (always unary)
-syntax match poshOperator /++\|--/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshOperator /++\|--/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 
 " Property and method reference operators
-syntax match poshOperator /::/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
-syntax match poshMemberDot /\%(\h\|\]\|)\)\zs\.\ze\%(\h\|[[(]\)/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
-"hi def link poshMemberDot Operator
-hi def link poshMemberDot Delimiter
+syntax match poshOperator /::/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
+syntax match poshMemberDot /\%(\h\|\]\|)\)\zs\.\ze\%(\h\|[[(]\)/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
+hi def link poshMemberDot Operator
 " Format operator
-syntax match poshOperator /-f\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshOperator /-f\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 " Redirection operators
-syntax match poshRedirectionOperators /\d\?>\%(>\|&\d\)/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExamplePromptPS,poshExamplePromptContinuation,poshExamplePromptContinuationOnly
+syntax match poshRedirectionOperators /\d\?>\%(>\|&\d\)/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExamplePromptPS,poshExamplePromptContinuation,poshExamplePromptContinuationOnly,poshExampleOutputLine
 hi def link poshRedirectionOperators Operator
 
-syntax match poshCallOp /\%(&\|\.\%(\s\+\)\@=\)/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshCallOp /\%(&\|\.\%(\s\+\)\@=\)/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 hi def link poshCallOp Operator
 
 syntax match poshParenDelim /[()]/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine,xmlRegion,xmlString,xmlCdata,poshAttribute,poshCast contains=NONE
 hi def link poshParenDelim Delimiter
+syntax match poshBraceDelim /[{}]/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine,xmlRegion,xmlString,xmlCdata contains=NONE
+hi def link poshBraceDelim Delimiter
 
 " ----------------------------------------------------------------------------
 " 8) Grouping & Sub-experssion regions
@@ -479,7 +480,19 @@ hi def link poshExampleOutputLine Normal
 syntax region poshRegion         start=/^\s*#\s*region/ end=/^\s*#\s*endregion/ fold keepend
 hi def link   poshRegion         PreProc
 
-syntax region poshBracesFold     start=/{/ end=/}/ fold transparent
+syntax region poshBracesFold                          start=/{/     end=/}/ fold keepend transparent containedin=TOP,poshHashObjFold,poshArrayFold,poshBeginFold,poshProcessFold,poshEndFold,poshCleanFold,poshDynamicParamFold,poshSwitchFold,poshTryFold,poshCatchFold,poshFinallyFold,poshDocExampleCode
+syntax region poshHashObjFold    matchgroup=Delimiter start=/@\zs{/ end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent containedin=TOP,poshBracesFold
+syntax region poshArrayFold      matchgroup=Delimiter start=/@\zs(/ end=/)/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent containedin=TOP,poshBracesFold
+syntax match poshAtHashSigil  /@\ze{/ containedin=TOP,poshHashObjFold,poshArrayFold,poshBeginFold,poshProcessFold,poshEndFold,poshCleanFold,poshDynamicParamFold,poshSwitchFold,poshTryFold,poshCatchFold,poshFinallyFold,poshDocExampleCode
+syntax match poshAtArraySigil /@\ze(/ containedin=TOP,poshHashObjFold,poshArrayFold,poshBeginFold,poshProcessFold,poshEndFold,poshCleanFold,poshDynamicParamFold,poshSwitchFold,poshTryFold,poshCatchFold,poshFinallyFold,poshDocExampleCode
+hi def link poshAtHashSigil  Delimiter
+hi def link poshAtArraySigil Delimiter
+
+syntax region poshBeginFold        start=/^\s*begin\>\_s*{/ms=e+1        end=/^\s*}/me=s-1 fold keepend transparent
+syntax region poshProcessFold      start=/^\s*process\>\_s*{/ms=e+1      end=/^\s*}/me=s-1 fold keepend transparent
+syntax region poshEndFold          start=/^\s*end\>\_s*{/ms=e+1          end=/^\s*}/me=s-1 fold keepend transparent
+syntax region poshCleanFold        start=/^\s*clean\>\_s*{/ms=e+1        end=/^\s*}/me=s-1 fold keepend transparent
+syntax region poshDynamicParamFold start=/^\s*dynamicparam\>\_s*{/ms=e+1 end=/^\s*}/me=s-1 fold keepend transparent
 
 syntax region poshParamFold      start=/^\s*param\>\_s*(/ms=e+1 end=/)/me=s-1 fold keepend transparent
 syntax region poshFunctionFold   start=/^\s*function\>\_.\{-}\_s*{/ms=e+1 end=/^\s*}/me=s-1 fold keepend transparent
