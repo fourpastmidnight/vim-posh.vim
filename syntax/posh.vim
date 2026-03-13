@@ -339,19 +339,19 @@ hi def link   poshAttribute PreProc
 " 7) Operators, Keywords, Reserved Keywords, Types, Cmdlets, Escapes
 " ----------------------------------------------------------------------------
 " Arithmetic operators
-syntax match poshOperator /[-+*%\/]\%(\h\)\@!/
+syntax match poshOperator /[-+*%\/]\%(\h\)\@!/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 " Assignment operators
-syntax match poshOperator /[-+*%\/]\?=/
+syntax match poshOperator /[-+*%\/]\?=/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 " Comparison operators
-syntax match poshOperator /-[ci]\?\%(eq\|ne\|gt\|ge\|lt\|le\)\>/
+syntax match poshOperator /-[ci]\?\%(eq\|ne\|gt\|ge\|lt\|le\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 " Containment operators
-syntax match poshOperator /-[ci]\?\%(not\)\?\%(contains\|in\)\>/
+syntax match poshOperator /-[ci]\?\%(not\)\?\%(contains\|in\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 " Pattern-matching and text-manipulation operators
-syntax match poshOperator /-\%([ci]\?\%(not\)\?\%(like\|match\|replace\|split\)\|join\)\>/
+syntax match poshOperator /-\%([ci]\?\%(not\)\?\%(like\|match\|replace\|split\)\|join\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 " Logical and bitwise operators
-syntax match poshOperator /-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/
+syntax match poshOperator /-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 " Type operators
-syntax match poshOperator /-\%(is\%(not\)\?\|as\)\>/
+syntax match poshOperator /-\%(is\%(not\)\?\|as\)\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 
 " -----------------------------------------------------------------------------
 "  Unary operators (placed AFTER broad operator matches above so they take
@@ -359,29 +359,29 @@ syntax match poshOperator /-\%(is\%(not\)\?\|as\)\>/
 " -----------------------------------------------------------------------------
 " Unary + / - (prefix sign only), allowing numbers, $, quotes, grouping (,
 " casts [, and here-strings (@" / @') - but NOT array subexpressions (@(...)).
-syntax match poshUnaryOpSign /\%(^\|[([{;,|=?:]\)\s*\zs[+-]\ze\s*\%(\d\|\$\|["']\|(\|\[\|@\%(["']\)\)/
+syntax match poshUnaryOpSign /\%(^\|[([{;,|=?:]\)\s*\zs[+-]\ze\s*\%(\d\|\$\|["']\|(\|\[\|@\%(["']\)\)/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 hi def link poshUnaryOpSign Operator
 " Unary ! operator
-syntax match poshUnaryBang /\%(^\|[([{;,|=?:]\)\s*\zs!\ze\s*\S/
+syntax match poshUnaryBang /\%(^\|[([{;,|=?:]\)\s*\zs!\ze\s*\S/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 hi def link poshUnaryBang Operator
 " Unary comma at expression start (array construction)
-syntax match poshUnaryComma /\%(^\|[([{;,|=?:]\)\s*\zs,\ze\s*\S/
+syntax match poshUnaryComma /\%(^\|[([{;,|=?:]\)\s*\zs,\ze\s*\S/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 hi def link poshUnaryComma Operator
 " Increment / Decrement (always unary)
-syntax match poshOperator /++\|--/
+syntax match poshOperator /++\|--/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 
 " Property and method reference operators
-syntax match poshOperator /::/
-syntax match poshMemberDot /\%(\h\|\]\|)\)\zs\.\ze\%(\h\|[[(]\)/
+syntax match poshOperator /::/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
+syntax match poshMemberDot /\%(\h\|\]\|)\)\zs\.\ze\%(\h\|[[(]\)/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 "hi def link poshMemberDot Operator
 hi def link poshMemberDot Delimiter
 " Format operator
-syntax match poshOperator /-f\>/
+syntax match poshOperator /-f\>/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 " Redirection operators
-syntax match poshOperator /\d\?>\%(>\|&\d\)/
+syntax match poshOperator /\d\?>\%(>\|&\d\)/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 hi def link poshOperator Operator
 
-syntax match poshCallOp /\%(&\|\.\%(\s\+\)\@=\)/
+syntax match poshCallOp /\%(&\|\.\%(\s\+\)\@=\)/ containedin=ALLBUT,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 hi def link poshCallOp Operator
 
 " ----------------------------------------------------------------------------
@@ -437,7 +437,7 @@ hi def link poshFuncScope PreProc
 " -----------------------------------------------------------------------------
 " Conventional cmdlets (those with approved verbs): highlight whole token as
 " Function. Optional prefixes: Module\Name OR Drive:\Name
-execute 'syntax match poshCmdletConventional /\<\%(\h\k*:\\\|\h\k*\\\)\?\%(' . s:approved_verbs . '\)\%(-\k\+\)\+\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs'
+execute 'syntax match poshCmdletConventional /\<\%(\h\k*:\\\|\h\k*\\\)\?\%(' . s:approved_verbs . '\)\%(-\k\+\)\+\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs'
 hi def link poshCmdletConventional Function
 
 " Hyphenated function names (fallback when verb is not in the approved list).
@@ -445,7 +445,7 @@ hi def link poshCmdletConventional Function
 syntax match poshFunctionHyphen /\<\%(\h\k*:\\\|\h\k*\\\)\?\k\+\%(-\k\+\)\+\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,postHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs contains=poshCmdletConventional
 hi def link poshFunctionHyphen Identifier
 
-syntax match poshParameter /\<-\%(-\|%\)\@!\%(\%([ci]\)\?\%(not\)\?\%(eq\|ne\|gt\|ge\|lt\|le\|contains\|in\|like\|match\|replace\|split\|join\|b\?\%(and\|x\?or\)\|bnot\|sh[lr]\|is\%(not\)\?\|as\|f\)\>\)\@!\h\w*\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs contains=poshCmdletConventional
+syntax match poshParameter /\<-\%(-\|%\)\@!\%(\%([ci]\)\?\%(not\)\?\%(eq\|ne\|gt\|ge\|lt\|le\|contains\|in\|like\|match\|replace\|split\|join\|b\?\%(and\|x\?or\)\|bnot\|sh[lr]\|is\%(not\)\?\|as\|f\)\>\)\@!\h\w*\>/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,xmlRegion,xmlString,xmlCdata,poshCast,poshAttribute,poshTypeName,poshAttributeArgs contains=poshCmdletConventional
 hi def link poshParameter Identifier
 
 syntax keyword poshKeyword
@@ -453,7 +453,7 @@ syntax keyword poshKeyword
       \ else elseif end enum exit extends filter finally for foreach function
       \ hidden if in param private process protected public return static
       \ switch throw trap try until using where while workflow
-      \ containedin=ALLBUT,poshCast,poshAttribute,poshIndex,poshTypeName,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS
+      \ containedin=ALLBUT,poshCast,poshAttribute,poshIndex,poshTypeName,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine
 hi def link poshKeyword Keyword
 
 syntax keyword poshReservedKeyword case define export from global import namespace containedin=ALLBUT,poshCast,poshAttribute,poshIndex,poshTypeName,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS
