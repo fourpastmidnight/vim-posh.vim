@@ -313,12 +313,14 @@ hi def link poshVariable       Identifier
 " ----------------------------------------------------------------------------
 " 6) Types & Brackets
 " ----------------------------------------------------------------------------
-syntax match  poshTypeName "\[[A-Za-z_][A-Za-z0-9_.\[\],]*\]" contains=NONE containedin=poshCast,poshAtribute
+syntax match  poshTypeName /\[[A-Za-z_][A-Za-z0-9_.,\[\]]\+\]/ contains=NONE containedin=poshCast,poshAtribute
 " [Type] cast - highlight only the brackets as operator: inner remains
 " poshTypeName
-syntax region poshCast          matchgroup=Type      start=/\%(^\|\s\|[([{,;|]\)\zs\[/  end=/]/  keepend transparent           contains=poshTypeName containedin=ALLBUT,poshAttribute,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine,poshComment,poshBlockComment,poshDocBlockComment,xmlRegion,xmlString,xmlCdata
-syntax region poshAttribute     matchgroup=Delimiter start="\%(^\|\s\|[([{,;|]\)\zs\["  end="\]" keepend transparent           contains=poshTypeName,poshAttributeArgs containedin=ALLBUT,poshAttribute,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine,poshComment,poshBlockComment,poshDocBlockComment,xmlRegion,xmlString,xmlCadata
-syntax region poshAttributeArgs matchgroup=Delimiter start=/(/                          end=/)/  keepend transparent contained contains=@poshExampleCode containedin=poshAttribute
+syntax region poshCast          matchgroup=Type      start=/\%(^\|\s\|[([{,;|]\)\zs\[/  end=/]/ keepend transparent contains=poshTypeName,poshAttributeArgs containedin=ALLBUT,poshAttribute,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine,poshComment,poshBlockComment,poshDocBlockComment,xmlRegion,xmlString,xmlCdata
+syntax region poshAttribute     matchgroup=Delimiter start=/\%(^\|\s\|[([{,;|]\)\zs\[/  end=/]/ keepend transparent contains=poshTypeName,poshAttributeArgs containedin=ALLBUT,poshAttribute,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine,poshComment,poshBlockComment,poshDocBlockComment,xmlRegion,xmlString,xmlCadata
+"syntax region poshAttributeArgs matchgroup=Delimiter start=/(/                          end=/)/ keepend transparent contained contains=poshCast,poshTypeName,poshStringD,poshStringS,poshNumberLit,poshVariable containedin=poshAttribute
+syntax region poshAttributeArgs matchgroup=Delimiter start=/(/                          end=/)/ keepend transparent contained                               containedin=poshAttribute
+syntax region poshCastInAttr    matchgroup=Type      start=/\[/                         end=/]/ keepend transparent contains=poshTypeName                   containedin=poshAttributeArgs contained
 hi def link   poshTypeName Type
 " TODO: Change this highlighting link for attributes....
 hi def link   poshAttribute PreProc
