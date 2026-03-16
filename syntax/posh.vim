@@ -482,22 +482,25 @@ hi def link poshExampleOutputLine Normal
 syntax region poshRegion         start=/^\s*#\s*region/ end=/^\s*#\s*endregion/ fold keepend
 hi def link   poshRegion         PreProc
 
-syntax region poshBracesFold                          start=/{/     end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent containedin=TOP,poshHashObjFold,poshArrayFold,poshDocExampleCode " contains=poshBracesFold,poshHashObjFold,poshArrayFold,poshStringS,poshStringD,poshHereStringS,poshHereStringD,poshComment,poshBlockComment,poshVariable,poshScopedVariable,poshNsVariable,poshBracedVariable,poshNumberLit,poshBraceDelim,poshParenDelim
+"syntax region poshBracesFold                          start=/{/     end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent containedin=TOP,poshHashObjFold,poshArrayFold,poshDocExampleCode " contains=poshBracesFold,poshHashObjFold,poshArrayFold,poshStringS,poshStringD,poshHereStringS,poshHereStringD,poshComment,poshBlockComment,poshVariable,poshScopedVariable,poshNsVariable,poshBracedVariable,poshNumberLit,poshBraceDelim,poshParenDelim
+" syntax region poshBracesFold                          start=/{/     end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent " containedin=TOP,poshHashObjFold,poshArrayFold,poshDocExampleCode " contains=poshBracesFold,poshHashObjFold,poshArrayFold,poshStringS,poshStringD,poshHereStringS,poshHereStringD,poshComment,poshBlockComment,poshVariable,poshScopedVariable,poshNsVariable,poshBracedVariable,poshNumberLit,poshBraceDelim,poshParenDelim
+"syntax region poshBracesFold                          start=/{/     end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\|#.*$\)/ fold keepend transparent containedin=ALL,poshBracesFold
 "syntax region poshHashObjFold    matchgroup=Delimiter start=/@\zs{/ end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent containedin=TOP,poshBracesFold contains=poshStringS,poshStringD,poshHereStringS,poshHereStringD,poshComment,poshBlockComment,poshVariable,poshScopedVariable,poshBracedVariable,poshNsVariable,poshNumberLit,poshAtHashSigil,poshAtArraySigil,poshBraceDelim,poshParenDelim,poshHashObjFold,poshArrayFold
 "syntax region poshArrayFold      matchgroup=Delimiter start=/@\zs(/ end=/)/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent containedin=TOP,poshBracesFold contains=poshStringS,poshStringD,poshHereStringS,poshHereStringD,poshComment,poshBlockComment,poshVariable,poshScopedVariable,poshBracedVariable,poshNsVariable,poshNumberLit,poshAtHashSigil,poshAtArraySigil,poshBraceDelim,poshParenDelim,poshHashObjFold,poshArrayFold
 "syntax region poshHashObjFold    matchgroup=Delimiter start=/\zs@{/ end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ keepend transparent contains=poshStringS,poshStringD,poshHereStringS,poshHereStringD,poshComment,poshBlockComment,poshVariable,poshScopedVariable,poshBracedVariable,poshNsVariable,poshNumberLit,poshAtHashSigil,poshAtArraySigil,poshBraceDelim,poshParenDelim,poshHashObjFold,poshArrayFold
 "syntax region poshArrayFold      matchgroup=Delimiter start=/\zs@(/ end=/)/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent contains=poshStringS,poshStringD,poshHereStringS,poshHereStringD,poshComment,poshBlockComment,poshVariable,poshScopedVariable,poshBracedVariable,poshNsVariable,poshNumberLit,poshAtHashSigil,poshAtArraySigil,poshBraceDelim,poshParenDelim,poshHashObjFold,poshArrayFold
-syntax region poshHashObjFold    matchgroup=Delimiter start=/@\zs{/ end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ keepend transparent
-syntax region poshArrayFold      matchgroup=Delimiter start=/@\zs(/ end=/)/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent
+"syntax region poshHashObjFold    matchgroup=Delimiter start=/@\zs{/ end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ keepend transparent contains=ALL
+"syntax region poshArrayFold      matchgroup=Delimiter start=/@\zs(/ end=/)/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ fold keepend transparent
+"syntax region poshHashObjFold    matchgroup=Delimiter start=/@\zs{/ end=/}/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ keepend transparent contains=ALL
 "syntax match poshAtHashSigil  /@\ze{/ containedin=TOP,poshHashObjFold,poshArrayFold,poshBeginFold,poshProcessFold,poshEndFold,poshCleanFold,poshDynamicParamFold,poshSwitchFold,poshTryFold,poshCatchFold,poshFinallyFold,poshDocExampleCode
 "syntax match poshAtArraySigil /@\ze(/ containedin=TOP,poshHashObjFold,poshArrayFold,poshBeginFold,poshProcessFold,poshEndFold,poshCleanFold,poshDynamicParamFold,poshSwitchFold,poshTryFold,poshCatchFold,poshFinallyFold,poshDocExampleCode
 "syntax match poshAtHashSigil  /@\ze{/ containedin=TOP,poshHashObjFold,poshArrayFold,poshBracesFold,poshDocExampleCode contains=NONE
 "syntax match poshAtArraySigil /@\ze(/ containedin=TOP,poshHashObjFold,poshArrayFold,poshBracesFold,poshDocExampleCode contains=NONE
-syntax region poshHashObjOuterFold start=/@\{/ skip=/\%(@"\_.\{-}"@\|@'\_.\{-}'@\|'\%(''\|[^']\)*'\|"\%(\`.\|[^"]\)*"\)/ end=/}/ fold keepend transparent containedin=TOP contains=ALL
-syntax match poshAtHashSigil  /@\ze{/ contained containedin=poshHashObjFold
-syntax match poshAtArraySigil /@\ze(/ contained containedin=poshArrayFold
-hi def link poshAtHashSigil  Delimiter
-hi def link poshAtArraySigil Delimiter
+"syntax match poshAtHashSigil  /@\ze{/ contained containedin=poshHashObjFold
+"syntax match poshAtHashSigil  /@\ze{/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,xmlRegion,xmlString,xmlCdata
+"syntax match poshAtArraySigil /@\ze(/ contained containedin=poshArrayFold
+"hi def link poshAtHashSigil  Delimiter
+"hi def link poshAtArraySigil Delimiter
 
 syntax region poshBeginFold        start=/^\s*begin\>\_s*{/ms=e+1        end=/^\s*}/me=s-1 fold keepend transparent
 syntax region poshProcessFold      start=/^\s*process\>\_s*{/ms=e+1      end=/^\s*}/me=s-1 fold keepend transparent
