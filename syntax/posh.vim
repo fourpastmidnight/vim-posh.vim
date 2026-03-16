@@ -242,11 +242,13 @@ syntax cluster poshInterpCode contains=
 " interpolation.
 
 " Interpolation region: $(...)
-syntax region poshInterpolation matchgroup=poshInterpolationDelimiter start=/\$(/ end=/)/ contained contains=ALLBUT,@poshNotTop
+"syntax region poshInterpolation matchgroup=poshInterpolationDelimiter start=/\$(/ end=/)/ contained contains=ALLBUT,@poshNotTop
+syntax region poshInterpolation matchgroup=poshInterpolationDelimiter start=/\$(/ end=/)/ keepend contained contains=@poshInterpCode,poshNestedParentheses
 hi def link poshInterpolationDelimiter Delimiter
 
 " Parentheses nested inside interpolation (e.g. MethodCall(...))
-syntax region poshNestedParentheses matchgroup=Delimiter start=/(/ end=/)/ skip=/\\\\\|\\)/ keepend transparent contained
+"syntax region poshNestedParentheses matchgroup=Delimiter start=/(/ end=/)/ skip=/\\\\\|\\)/ keepend transparent contained
+syntax region poshNestedParentheses matchgroup=Delimiter start=/(/ end=/)/ skip=/\`)/ keepend transparent contained contains=@poshInterpCode,poshNestedParentheses
 
 " --- Powell escape sequences (double-quoted contexts) ---
 " Scope: contained - only active in containers that list poshEscape
@@ -369,7 +371,7 @@ hi def link poshRedirectionOperators Operator
 syntax match poshCallOp /\%(&\|\.\%(\s\+\)\@=\)/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 hi def link poshCallOp Operator
 
-syntax match poshParenDelim /[()]/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine,xmlRegion,xmlString,xmlCdata,poshAttribute,poshCast contains=NONE
+syntax match poshParenDelim /[()]/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshInterpolation,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine,xmlRegion,xmlString,xmlCdata,poshAttribute,poshCast contains=NONE
 hi def link poshParenDelim Delimiter
 syntax match poshBraceDelim /[{}]/ containedin=ALLBUT,poshComment,poshBlockComment,poshDocBlockComment,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine,xmlRegion,xmlString,xmlCdata contains=NONE
 hi def link poshBraceDelim Delimiter
