@@ -32,7 +32,7 @@ syntax keyword poshKeyword
       \ filter finally for foreach from function hidden if in param process return static switch throw
       \ trap try until using var while inlinescript parallel sequence workflow
 
-hi def link poshKeyword Keyword
+highlight default link poshKeyword Keyword
 
 "" ----------------------------------------------------------------------------
 "" 0) Options & CBH keywords (script-local)
