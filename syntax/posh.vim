@@ -27,7 +27,7 @@ elseif exists("b:current_syntax")
   finish
 endif
 
-syntax keyword poshKeywords
+syntax keyword poshKeyword
       \ begin break catch class clean continue data define do dynamicparam else elseif end enum exit
       \ filter finally for foreach from function hidden if in param process return static switch throw
       \ trap try until using var while inlinescript parallel sequence workflow
