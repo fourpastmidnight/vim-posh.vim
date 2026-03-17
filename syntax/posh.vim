@@ -27,12 +27,18 @@ elseif exists("b:current_syntax")
   finish
 endif
 
+" Operators {{{1
+
+"syntax match poshOperator /-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
+syntax match poshLogicalBooleanOperators /<-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/
+
 syntax keyword poshKeyword
       \ begin break catch class clean continue data define do dynamicparam else elseif end enum exit
       \ filter finally for foreach from function hidden if in param process return static switch throw
       \ trap try until using var while inlinescript parallel sequence workflow
 
 highlight default link poshKeyword Keyword
+highlight default link poshLogicalBooleanOperators Operator
 
 "" ----------------------------------------------------------------------------
 "" 0) Options & CBH keywords (script-local)
