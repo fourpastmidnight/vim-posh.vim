@@ -20,8 +20,8 @@ setlocal shiftwidth=4
 setlocal softtabstop=4
 
 " Allow $ and - as part of keywords, since PowerShell uses Verb-Noun cmdlets
-setlocal iskeyword+=$,-
-" For .ps1xml, we remove '-' from keywords for better XML semantics (below)
+setlocal iskeyword+=$,-,@
+" For .ps1xml, we remove '-' and '@' from keywords for better XML semantics (below)
 
 " Folding: create all folds, but defalut to showing them open
 setlocal foldmethod=syntax
@@ -165,7 +165,7 @@ endif
 " XML comment behavior for ps1xml files
 if expand('%:e') ==# 'ps1xml'
   setlocal commentstring=<!--\ %s\ -->
-  setlocal iskeyword-=-   " hyphen no longer part of word in XML context
+  setlocal iskeyword-=-,@   " hyphen no longer part of word in XML context
 endif
 
 " ---------------------------------------------------------------------------
