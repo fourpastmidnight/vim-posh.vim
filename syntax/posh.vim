@@ -30,7 +30,7 @@ endif
 " Operators {{{1
 
 "syntax match poshOperator /-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
-syntax match poshLogicalBooleanOperators /<-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/
+syntax match poshLogicalBooleanOperators "<-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>"
 
 syntax keyword poshKeyword
       \ begin break catch class clean continue data define do dynamicparam else elseif end enum exit
