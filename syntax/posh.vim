@@ -27,18 +27,56 @@ elseif exists("b:current_syntax")
   finish
 endif
 
-" Operators {{{1
-
-"syntax match poshOperator /-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
-syntax match poshLogicalBooleanOperators "<-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>"
+" Keywords {{{1
+syntax keyword poshDefaultTypeAcceleratorType
+      \ adsk adsisearcher Alias AllowEmptyCollection AllowEmptyString AllowNull ArgumentCompletere
+      \ ArgumentCompletions array bigint bool byte char cimclass cimconverter ciminstance CimSession
+      \ cimtype CmdletBinding cultureinfo datetime decimal double DscLocalConfigurationManager
+      \ DscProperty DscResource ExperimentAction Experimental ExperimentalFeature float guid hashtable
+      \ initialsessionstate int int16 int32 int64 ipaddress IPEndpoint long mailaddress NoRunspaceAffinity
+      \ NullString ObjectSecurity ordered OutputType Parameter PhysicalAddress powershell psaliasproperty
+      \ pscredential pscustomobject PSDefaultValue pslistmodifier psmoduleinfo psnoteproperty psobject
+      \ psprimitivedictionary psporpertyexperssion psscriptmethod psscriptproperty PSTypeNameAttribute
+      \ psvariable psvariableproperty ref regex runspace runspacefactory sbyte scriptblock securestring
+      \ semver short single string SupportsWildcards switch timespan type uint uint16 uint32 uint64 ulong
+      \ uri ushort ValidateCount ValidateDrive ValidateLength ValidateNotNull ValidateNotNullOrEmpty
+      \ ValidateNotNullOrWhiteSpace ValidatePattern ValidateRange ValidateScript ValidateSet
+      \ ValidateTrustedData validateUserDrive version void WildcardPattern wmi wmiclass wmisearcher
+      \ X500DistinguishedName X509Certificate xml
 
 syntax keyword poshKeyword
       \ begin break catch class clean continue data define do dynamicparam else elseif end enum exit
       \ filter finally for foreach from function hidden if in param process return static switch throw
       \ trap try until using var while inlinescript parallel sequence workflow
 
-highlight default link poshKeyword Keyword
-highlight default link poshLogicalBooleanOperators Operator
+" Operators {{{1
+
+"syntax match poshOperator /-\%(sh[lr]\|b\?\%(and\|x\?or\|not\)\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
+syntax match poshArithmeticOperator      "[*/%+]\|->\@!"
+syntax match poshBitwiseOperators        "<-\%(sh[lr]\|b\%(and\|x\?or\|not\)\)\>"
+syntax match poshAssignmentOperator      "=>\@!\|+=\|-=\|\*=\|\/=\|%="
+"syntax match poshOperator /-[ci]\?\(eq\|ne\|gt\|ge\|lt\|le\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
+syntax match poshComparisonOperator      "\%(\w\|[^\x00-\x7F]\)\@1<!-[ci]\?\%(eq\|ne\|gt\|lt\|le\|ge\)"
+syntax match poshLogicalOperator         "\%(\w\|[^\x00-\x7F]\)\@1<-\%(and\|x\?or\|not\|!\)"
+syntax match poshRedirectionOperator     "[1-6\*]\?\>\{1,2}\%(&1\)\?"
+syntax match poshSplitJoinOperator       "-\%([ci]split\|join\)"
+syntax match poshTypeOperator            "-\%(is\%(not\)\?\|as\)"
+syntax match poshRangeOperator           "\.\."
+syntax match poshDotOperator             "\."
+
+highlight default link poshArithmeticOperator         Operator
+highlight default link poshBitwiseOperators           Operator
+highlight default link poshAssignmentOperator         Operator
+highlight default link poshComparisonOperator         Operator
+highlight default link poshLogicalOperator            Operator
+highlight default link poshRedirectionOperator        Operator
+highlight default link poshSplitJoinOperator          Operator
+highlight default link poshTypeOperator               Operator
+highlight default link poshRangeOperator              Operator
+highlight default link poshDotOperator                Operator
+
+highlight default link poshDefaultTypeAcceleratorType Type
+highlight default link poshKeyword                    Keyword
 
 "" ----------------------------------------------------------------------------
 "" 0) Options & CBH keywords (script-local)
