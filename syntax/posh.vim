@@ -40,15 +40,32 @@ if !exists('g:posh_syntax_backing')
   let g:posh_syntax_backing = get(g:, 'posh_syntax_backing', 'auto')
 endif
 
-syntax case ignore  
+" Ensure Unicode is supported in patterns. This is needed because PowerShell
+" strings support smart-quotes.
+scriptencoding utf-8
+
+syntax case ignore
 
 " Comments {{{1
 syntax match poshComment "#.*" keepend
 syntax region poshBlockComment start="<#" end="#>" keepend
 
+" Strings {{{1
+
+syntax match poshEscapeSeq '`[0abefnrtv"`“”]' contained
+syntax match poshEscapeSeq '`u{0-9A-Fa-f]\{1,6\}}' contained
+
+
+syntax region poshStringD start='"' skip='`"' end='"' keepend contains=poshEscapeSeq
+syntax region poshStringS start="'" skip="''" end="'" keepend
+
 
 hi def link poshComment      Comment
 hi def link poshBlockComment Comment
+
+hi def link poshEscapeSeq    SpecialChar
+hi def link poshStringD      String
+hi def link poshStringS      String
 
 let b:current_syntax = "posh"
 
