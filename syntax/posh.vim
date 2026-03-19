@@ -58,7 +58,7 @@ syntax match poshAssignmentOperator      "=>\@!\|+=\|-=\|\*=\|\/=\|%="
 "syntax match poshOperator /-[ci]\?\(eq\|ne\|gt\|ge\|lt\|le\)\>/ containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshExHereStringD,poshExHereStringS,poshExampleHereBodyLine,poshExampleOutputLine
 syntax match poshComparisonOperator      "\%(\w\|[^\x00-\x7F]\)\@1<!-[ci]\?\%(eq\|ne\|gt\|lt\|le\|ge\)"
 syntax match poshLogicalOperator         "\%(\w\|[^\x00-\x7F]\)\@1<-\%(and\|x\?or\|not\|!\)"
-syntax match poshRedirectionOperator     "[1-6\*]\?\>\{1,2}\%(&1\)\?"
+syntax match poshRedirectionOperator     "[1-6\*]\?>\{1,2}\%(&1\)\?"
 syntax match poshSplitJoinOperator       "-\%([ci]split\|join\)"
 syntax match poshTypeOperator            "-\%(is\%(not\)\?\|as\)"
 syntax match poshRangeOperator           "\.\."
