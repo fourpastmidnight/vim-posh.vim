@@ -48,7 +48,7 @@ syntax case ignore
 
 " Comments {{{1
 syntax match poshComment "#.*" keepend
-syntax region poshBlockComment start="<#" end="#>" keepend
+syntax region poshBlockComment start="<#\_s*" end="\_s*#>" keepend
 
 " Strings {{{1
 
