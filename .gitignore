@@ -1,0 +1,22 @@
+# Ignore vim Swap files
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Ignore vim backup files
+*~
+
+# Ignore vim undo files
+[._]*.un~
+
+# Ignore vim session files
+Session.vim
+Sessionx.vim
+
+# Ignore vim Netrw history
+netrwhist
+
+# Ignore vim tags files
+tags

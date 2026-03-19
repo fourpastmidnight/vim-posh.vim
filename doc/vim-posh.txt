@@ -1,6 +1,69 @@
 *posh.txt*              PowerShell Filetype Support for Vim/Neovim          *vim-posh*
 
 ==============================================================================
+INTRODUCTION                                                     *posh-intro*
+
+    vim-posh is a modular PowerShell filetype plugin designed to be safer,
+    simpler, and more maintainable than the legacy ps1.vim script. Features
+    are added incrementally and are always OFF by default.
+
+    Current behavior:
+      - Accurate filetype detection (*.ps1, *.psm1, *.psd1, *.pssc, *.ps1xml)
+      - Optional shebang detection for pwsh/powershell
+      - Syntax wrapper delegating to the maintained baseline or upstream ps1.vim
+
+    No indentation, folding, or syntax enhancements are active yet.
+
+==============================================================================
+FEATURE FLAGS
+
+    g:posh_syntax_level
+          Controls how much additional syntax logic is enabled.
+          Values:
+            'base'  - deafult; minimal, stable, safe
+            'plus'  - opt-in enhancements (added later)
+            'full'  - aggressive matching (never automatic)
+
+    g:posh_enable_indent
+          0 or 1.  When turned on, enables a custom indentation engine.
+          Disabled by default.
+
+    g:posh_enable_fold
+          0 or 1. When turned on, enables a custom folding rules.
+          Disabled by default.
+
+    g:posh_syntax_backing
+          Controls syntax delegation:
+            'auto' - prefer maintained posh.vim; fallback to ps1.vim
+            'posh' - force maintained posh.vim
+            'ps1'  - force stock ps1.vim
+
+    g:posh_disable_syntax_wrapper
+          0 or 1. When set, bypasses posh.vim plugin entirely.
+
+==============================================================================
+CHANGELOG                                                    *posh-changelog*
+
+  0.1.0  Initial bootstrap:
+         - Filetype detection (*.ps1, *.psm1, *.psd1, *.pssc, *.ps1xml)
+         - Shebang detection
+         - Flags scaffold
+
+  0.1.1  Syntax wrapper
+         - Delegates to maintained posh.vim or upstream ps1.vim
+
+  0.1.2  Help file + feature flag documentation
+
+==============================================================================
+INSTALL                                                        *posh-install*
+
+    Using vim-plug:
+        Plug 'fourpastmidnight/vim-posh.vim', { 'branch': 'start_fresh' }
+
+    Help tags:
+        :helptags ~/.vim/plugged/vim-posh/doc
+
+==============================================================================
 NAME
     vim-posh — Enhanced PowerShell filetype support (posh) for Vim/Neovim.
 
@@ -175,3 +238,6 @@ LICENSE
 
 ==============================================================================
 vim-posh                                                              *posh*
+
+==============================================================================
+END                                                                *posh-end*
