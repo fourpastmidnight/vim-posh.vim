@@ -12,12 +12,12 @@
 " =============================================================================
 
 " Set the filetype based on the filename extension
-autocmd BufNewFile,BufRead   *.ps1,*.ps1xml,*.psm1,*.psd1,*.pssc  set ft=posh
+autocmd BufNewFile,BufRead   *.ps1,*.ps1xml,*.psm1,*.psd1,*.pssc  setfiletype posh
 
 " Set the filetype based on any shebang--for example, loose scripts
 autocmd BufNewFile,BufRead *
-            \ if getline(1) =~# '^#!.*\<powershell\>\|^#!.*\<pwsh\>' |
-            \ setf ft=posh |
+            \ if getline(1) =~# '^#!.*\<\(pwsh\|powershell\)\>' |
+            \ setfiletype posh |
             \ endif
 
 " vim: set sw=2 ts=2 sts=2 et:

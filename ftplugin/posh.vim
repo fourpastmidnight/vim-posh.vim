@@ -153,6 +153,7 @@ setlocal foldtext=PoshFoldText()
 
 " Default: PowerShell-style comments
 setlocal commentstring=#\ %s
+setlocal comments="s:<#,m:,e:#>"
 
 " Use Invoke-Formatter for script files, not ps1xml
 if executable('pwsh')
