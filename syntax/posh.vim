@@ -13,12 +13,11 @@
 " Project Repository: https://github.com/fourpastmidnight/vim-posh.vim
 " Vim Script Page:
 "
-" Configuration:
-"   g:posh_use_legacy_doccomments
-"     = 1 -> <# ... #> are treated as documentation comments (and as block
-"            comments); <## ... ##> are regular block comments.
-"     = 0 -> <## ... ##> are documentation comments; <# ... #> are regular
-"            block comments. (Default when unset.)
+" Usage:
+"   let g:posh_syntax_backing = 'auto' | 'posh' | 'ps1'
+"     'auto' (defualt): try maintained posh first; else stock ps1
+"     'posh'          : force maintained posh (if present)
+"     'ps1'           : force stock ps1 rules
 " =============================================================================
 
 if version < 600
@@ -40,6 +39,18 @@ if !exists('g:posh_syntax_backing')
   " 'auto' means: try posh-first, then stock ps1
   let g:posh_syntax_backing = get(g:, 'posh_syntax_backing', 'auto')
 endif
+
+syntax case ignore  
+
+" Comments {{{1
+syntax match poshComment "#.*" keepend
+syntax region poshBlockComment start="<#" end="#>" keepend
+
+
+hi def link poshComment      Comment
+hi def link poshBlockComment Comment
+
+let b:current_syntax = "posh"
 
 "" Keywords {{{1
 "
@@ -663,4 +674,4 @@ endif
 "  syntax sync match poshSyncRegEnd    groupthere NONE                /^\s*#>/
 "endif
 
-let b:current_syntax = "posh"
+"let b:current_syntax = "posh"
