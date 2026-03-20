@@ -56,17 +56,10 @@ syntax match poshEscapeSeq '`[0abefnrtv"`“”]' contained
 syntax match poshEscapeSeq '`u{0-9A-Fa-f]\{1,6\}}' contained
 
 
-syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=poshEscapeSeq
+syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=@Spell,poshEscapeSeq
 syntax region poshStringS     start="'"   skip="''" end="'"   keepend
-syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=poshEscapeSeq
+syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=@Spell,poshEscapeSeq
 syntax region poshHereStringS start="@'$"           end="^'@" keepend
-
-" Highlight bad here-string openers
-if get(g:, 'posh_warn_here_string_open_trailing_space', 0)
-  syntax match poshHereStringBadOpen /@\%("\|'\)\zs\s\+$/ nextgroup=NONE containedin=TOP,poshStringD,poshStringS display
-  hi def link poshHereStringBadOpen Error
-endif
-
 
 hi def link poshComment      Comment
 hi def link poshBlockComment Comment
