@@ -63,7 +63,7 @@ syntax region poshHereStringS start="@'$"           end="^'@" keepend
 
 " Highlight bad here-string openers
 if get(g:, 'posh_warn_here_string_open_trailing_space', 0)
-  syntax match poshHereStringBadOpen /@\%("\|'\)\zs\s\+$/ nextgroup=NONE display
+  syntax match poshHereStringBadOpen /@\%("\|'\)\zs\s\+$/ nextgroup=NONE containedin=TOP display
   hi def link poshHereStringBadOpen Error
 endif
 
