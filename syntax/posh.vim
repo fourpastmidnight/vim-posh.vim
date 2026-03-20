@@ -61,6 +61,14 @@ syntax region poshStringS     start="'"   skip="''" end="'"   keepend
 syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=poshEscapeSeq
 syntax region poshHereStringS start="@'$"           end="^'@" keepend
 
+" Highlight bad here-string openers
+if get(g:, 'posh_warn_here_string_open_trailing_space', 0)
+  syntax match poshHereStringDBadOpen '@"\s+$' nextgroup=NONE
+  syntax match poshHereStringSBadOpen "@'\s+$" nextgroup=NONE
+  hi def link poshHereStringDBadOpen Error
+  hi def link poshHereStringSBadOpen Error
+endif
+
 
 hi def link poshComment      Comment
 hi def link poshBlockComment Comment
