@@ -63,10 +63,8 @@ syntax region poshHereStringS start="@'$"           end="^'@" keepend
 
 " Highlight bad here-string openers
 if get(g:, 'posh_warn_here_string_open_trailing_space', 0)
-  syntax match poshHereStringDBadOpen '@"\s+$' nextgroup=NONE
-  syntax match poshHereStringSBadOpen "@'\s+$" nextgroup=NONE
-  hi def link poshHereStringDBadOpen Error
-  hi def link poshHereStringSBadOpen Error
+  syntax match poshHereStringBadOpen /@\%("\|'\)\zs\s\+$/ nextgroup=NONE display
+  hi def link poshHereStringBadOpen Error
 endif
 
 
