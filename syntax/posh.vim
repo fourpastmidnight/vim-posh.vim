@@ -46,6 +46,8 @@ scriptencoding utf-8
 
 syntax case ignore
 
+syntax cluster poshNotTop contains=@poshStringNotTop,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshComment,poshBlockComment,poshDQuotedMember,poshSQuotedMember,@Spell
+
 " Comments {{{1
 syntax match poshComment "#.*" keepend contains=@Spell
 syntax region poshBlockComment start="<#\_s*" end="\_s*#>" keepend contains=@Spell
@@ -61,11 +63,16 @@ syntax region poshStringS     start="'"   skip="''" end="'"   keepend
 syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=@Spell,poshStringDEscape
 syntax region poshHereStringS start="@'$"           end="^'@" keepend
 
-hi def link poshComment      Comment
-hi def link poshBlockComment Comment
+syntax cluster poshStringSpecial contains=poshStringDEscape
+syntax cluster poshStringNotTop  contains=@poshStringSpecial
 
 syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip="''" end="'" keepend contains=NONE containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
+
+let s:ps_skip = '\%(@''\_.\{-}''@\|@"\_.\{-}"@\|''\%(''''\|[^'']\)*''\|"\%(`.\|[^"]\)*"\|<#\_.\{-}#>\|#.*$\)'
+execute 'syntax region poshParentheses matchgroup=Delimiter start="(" end=")" skip=/' . s:ps_skip . '/ transparent keepend contains=poshParen,@poshNotTop containedin=ALLBUT,@poshNotTop'
+" ^-- containedin=poshBlockParameterList <-- adapted from Ruby--don't know if we need it.
+execute 'syntax region poshBraces      matchgroup=Delimiter start="{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshBrace,@poshNotTop containedin=ALLBUT,@poshNotTop'
 
 hi def link poshComment        Comment
 hi def link poshBlockComment   Comment
