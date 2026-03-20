@@ -56,8 +56,10 @@ syntax match poshEscapeSeq '`[0abefnrtv"`“”]' contained
 syntax match poshEscapeSeq '`u{0-9A-Fa-f]\{1,6\}}' contained
 
 
-syntax region poshStringD start='"' skip='`"' end='"' keepend contains=poshEscapeSeq
-syntax region poshStringS start="'" skip="''" end="'" keepend
+syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=poshEscapeSeq
+syntax region poshStringS     start="'"   skip="''" end="'"   keepend
+syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=poshEscapeSeq
+syntax region poshHereStringS start="@'$"           end="^'@" keepend
 
 
 hi def link poshComment      Comment
