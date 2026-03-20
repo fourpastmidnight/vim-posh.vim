@@ -66,6 +66,10 @@ syntax region poshHereStringS start="@'$"           end="^'@" keepend
 syntax cluster poshStringSpecial contains=poshStringDEscape
 syntax cluster poshStringNotTop  contains=@poshStringSpecial
 
+" Identifiers {{{1
+syntax match poshVariable "\$\%(\k\+:\)\?\k\+" containedin=ALLBUT,poshComment,poshBlockComment,poshStringS,poshHereStringS display
+syntax match poshVariable "\${[^}\r\n]\+}"     containedin=ALLBUT,poshComment,poshBlockComment,poshStringS,poshHereStringS display
+
 syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip="''" end="'" keepend contains=NONE containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
 
@@ -83,6 +87,7 @@ hi def link poshSQuotedMember  String
 hi def link poshStringDEscape  SpecialChar
 hi def link poshStringD        String
 hi def link poshStringS        String
+hi def link poshVariable       Identifier
 
 let b:current_syntax = "posh"
 
