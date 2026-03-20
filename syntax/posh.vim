@@ -58,7 +58,7 @@ syntax match poshStringDEscape '`u{0-9A-Fa-f]\{1,6\}}' contained
 
 syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=@Spell,poshStringDEscape
 syntax region poshStringS     start="'"   skip="''" end="'"   keepend
-syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=@Spell,poshEscapeSeq
+syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=@Spell,poshStringDEscape
 syntax region poshHereStringS start="@'$"           end="^'@" keepend
 
 hi def link poshComment      Comment
