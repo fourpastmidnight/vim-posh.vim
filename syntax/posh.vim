@@ -47,8 +47,8 @@ scriptencoding utf-8
 syntax case ignore
 
 " Comments {{{1
-syntax match poshComment "#.*" keepend
-syntax region poshBlockComment start="<#\_s*" end="\_s*#>" keepend
+syntax match poshComment "#.*" keepend contains=@Spell
+syntax region poshBlockComment start="<#\_s*" end="\_s*#>" keepend contains=@Spell
 
 " Strings {{{1
 
