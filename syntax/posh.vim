@@ -64,9 +64,18 @@ syntax region poshHereStringS start="@'$"           end="^'@" keepend
 hi def link poshComment      Comment
 hi def link poshBlockComment Comment
 
-hi def link poshStringDEscape SpecialChar
-hi def link poshStringD      String
-hi def link poshStringS      String
+syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip="''" end="'" keepend contains=NONE containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
+syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
+
+hi def link poshComment        Comment
+hi def link poshBlockComment   Comment
+
+hi def link poshQuotedMember   String
+hi def link poshDQuotedMember  String
+hi def link poshSQuotedMember  String
+hi def link poshStringDEscape  SpecialChar
+hi def link poshStringD        String
+hi def link poshStringS        String
 
 let b:current_syntax = "posh"
 
