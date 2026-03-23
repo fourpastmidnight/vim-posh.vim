@@ -54,7 +54,7 @@ syntax region poshBlockComment start="<#\_s*" end="\_s*#>" keepend contains=@Spe
 
 " Strings {{{1
 
-syntax match poshStringDEscape '`[0abefnrtv"`“”]' contained
+syntax match poshStringDEscape '`[0abefnrtv"`“”\$]' contained
 syntax match poshStringDEscape '`u{0-9A-Fa-f]\{1,6\}}' contained
 
 
