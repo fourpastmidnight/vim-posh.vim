@@ -23,6 +23,9 @@ setlocal softtabstop=4
 setlocal iskeyword+=$,-,@
 " For .ps1xml, we remove '-' and '@' from keywords for better XML semantics (below)
 
+" Allow ? as part of identifiers
+setlocal isident+=?
+
 " Folding: create all folds, but defalut to showing them open
 setlocal foldmethod=syntax
 setlocal foldenable
