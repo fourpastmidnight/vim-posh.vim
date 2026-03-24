@@ -130,9 +130,9 @@ syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip=
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
 
 let s:ps_skip = '\%(@''\_.\{-}''@\|@"\_.\{-}"@\|''\%(''''\|[^'']\)*''\|"\%(`.\|[^"]\)*"\|<#\_.\{-}#>\|#.*$\|\${\%(`[{}]\|[^}\r\n]\)\+\)'
-execute 'syntax region poshParentheses matchgroup=Delimiter start="(" end=")" skip=/' . s:ps_skip . '/ transparent keepend contains=poshParen,@poshNotTop containedin=ALLBUT,@poshNotTop'
+execute 'syntax region poshParentheses matchgroup=Delimiter start="(" end=")" skip=/' . s:ps_skip . '/ transparent keepend contains=poshParen,@poshNotTop'
 " ^-- containedin=poshBlockParameterList <-- adapted from Ruby--don't know if we need it.
-execute 'syntax region poshBraces      matchgroup=Delimiter start="{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshBrace,@poshNotTop containedin=ALLBUT,@poshNotTop'
+execute 'syntax region poshBraces      matchgroup=Delimiter start="{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshBrace,@poshNotTop'
 
 syntax match poshHashTableSigil  "@\ze{" nextgroup=poshBraces      containedin=ALLBUT,@poshNotTop display
 syntax match poshArraySigil      "@\ze(" nextgroup=poshParentheses containedin=ALLBUT,@poshNotTop display
