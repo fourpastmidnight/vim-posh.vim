@@ -134,6 +134,9 @@ execute 'syntax region poshParentheses matchgroup=Delimiter start="(" end=")" sk
 " ^-- containedin=poshBlockParameterList <-- adapted from Ruby--don't know if we need it.
 execute 'syntax region poshBraces      matchgroup=Delimiter start="{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshBrace,@poshNotTop containedin=ALLBUT,@poshNotTop'
 
+execute 'syntax region poshHashTable   matchgroup=Delimiter start="@{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshHashTable,poshBrace,@poshNotTop containedin=ALLUBT,@poshNottop'
+execute 'syntax region poshArray       matchgroup=Delimiter start="@(" end=")" skip=/' . s:ps_skip . '/ transparent keepend contains=poshArray,poshParen,@poshNotTop     containedin=ALLBUT,@poshNotTop'
+
 syntax sync match poshSyncBraceOpen  grouphere poshBraces "{\s*$"
 syntax sync match poshSyncBraceClose grouphere poshBraces "^}\s*$"
 
