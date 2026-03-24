@@ -26,6 +26,8 @@ elseif exists("b:current_syntax")
   finish
 endif
 
+let s:cpo_sav = &cpo | set cpo&vim
+
 " Optional: allow quick disable from users' vimrc for A/B testing
 if get(g:, 'posh_disable_syntax_wrapper', 0)
   finish
@@ -45,6 +47,9 @@ endif
 scriptencoding utf-8
 
 syntax case ignore
+
+syntax sync minlines=800
+syntax sync linebreaks=1
 
 syntax cluster poshNotTop contains=@poshStringNotTop,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshComment,poshBlockComment,poshDQuotedMember,poshSQuotedMember,@Spell
 
@@ -129,6 +134,9 @@ execute 'syntax region poshParentheses matchgroup=Delimiter start="(" end=")" sk
 " ^-- containedin=poshBlockParameterList <-- adapted from Ruby--don't know if we need it.
 execute 'syntax region poshBraces      matchgroup=Delimiter start="{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshBrace,@poshNotTop containedin=ALLBUT,@poshNotTop'
 
+syntax sync match poshSyncBraceOpen  grouphere poshBraces "{\s*$"
+syntax sync match poshSyncBraceClose grouphere poshBraces "^}\s*$"
+
 hi def link poshComment        Comment
 hi def link poshBlockComment   Comment
 
@@ -187,6 +195,7 @@ hi def link poshAutovarSwitch                     Special
 hi def link poshAutoVarThis                       Special
 
 let b:current_syntax = "posh"
+let &cpo = s:cpo_sav | unlet s:cpo_sav
 
 "" Keywords {{{1
 "
