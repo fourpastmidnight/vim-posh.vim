@@ -137,8 +137,8 @@ execute 'syntax region poshBraces      matchgroup=Delimiter start="{" end="}" sk
 syntax match poshHashTableSigil  "@\ze{" nextgroup=poshBraces      containedin=ALLBUT,@poshNotTop display
 syntax match poshArraySigil      "@\ze(" nextgroup=poshParentheses containedin=ALLBUT,@poshNotTop display
 
-syntax sync match poshSyncBraceOpen      grouphere poshBraces    "{\s*$"
-syntax sync match poshSyncBraceClose     grouphere NONE          "^}\s*$"
+syntax sync match poshSyncBraceOpen      grouphere poshBraces      "{"
+syntax sync match poshSyncBraceClose     grouphere NONE            "}"
 "syntax sync match poshSyncHashtableOpen  grouphere poshBraces      "@{"
 "syntax sync match poshSyncHashtableClose grouphere NONE            "}"
 "syntax sync match poshOpenSyncArrayOpen  grouphere poshParentheses "@("
