@@ -134,11 +134,15 @@ execute 'syntax region poshParentheses matchgroup=Delimiter start="(" end=")" sk
 " ^-- containedin=poshBlockParameterList <-- adapted from Ruby--don't know if we need it.
 execute 'syntax region poshBraces      matchgroup=Delimiter start="{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshBrace,@poshNotTop containedin=ALLBUT,@poshNotTop'
 
-execute 'syntax region poshHashTable   matchgroup=Delimiter start="@{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshHashTable,poshBrace,@poshNotTop containedin=ALLUBT,@poshNottop'
-execute 'syntax region poshArray       matchgroup=Delimiter start="@(" end=")" skip=/' . s:ps_skip . '/ transparent keepend contains=poshArray,poshParen,@poshNotTop     containedin=ALLBUT,@poshNotTop'
+syntax match poshHashTableSigil  "@\ze{" nextgroup=poshBraces      containedin=ALLBUT,@poshNotTop display
+syntax match poshArraySigil      "@\ze(" nextgroup=poshParentheses containedin=ALLBUT,@poshNotTop display
 
 syntax sync match poshSyncBraceOpen      grouphere poshBraces    "{\s*$"
 syntax sync match poshSyncBraceClose     grouphere NONE          "^}\s*$"
+"syntax sync match poshSyncHashtableOpen  grouphere poshBraces      "@{"
+"syntax sync match poshSyncHashtableClose grouphere NONE            "}"
+"syntax sync match poshOpenSyncArrayOpen  grouphere poshParentheses "@("
+"syntax sync match poshOpenSyncArrayClose grouphere NONE            ")"
 
 hi def link poshComment        Comment
 hi def link poshBlockComment   Comment
@@ -196,6 +200,9 @@ hi def link poshAutovarShellId                    Number
 hi def link poshAutoVarStackTrace                 Debug
 hi def link poshAutovarSwitch                     Special
 hi def link poshAutoVarThis                       Special
+
+hi def link poshHashTableSigil                    Delimiter
+hi def link poshArraySigil                        Delimiter
 
 let b:current_syntax = "posh"
 let &cpo = s:cpo_sav | unlet s:cpo_sav
