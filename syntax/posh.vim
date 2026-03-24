@@ -124,7 +124,7 @@ syntax cluster poshAutoVars contains=poshAutovarBoolean,poshAutovarPlatform,posh
 syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip="''" end="'" keepend contains=NONE containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
 
-let s:ps_skip = '\%(@''\_.\{-}''@\|@"\_.\{-}"@\|''\%(''''\|[^'']\)*''\|"\%(`.\|[^"]\)*"\|<#\_.\{-}#>\|#.*$\)'
+let s:ps_skip = '\%(@''\_.\{-}''@\|@"\_.\{-}"@\|''\%(''''\|[^'']\)*''\|"\%(`.\|[^"]\)*"\|<#\_.\{-}#>\|#.*$\|\${\%(`[{}]\|[^}\r\n]\)\+\)'
 execute 'syntax region poshParentheses matchgroup=Delimiter start="(" end=")" skip=/' . s:ps_skip . '/ transparent keepend contains=poshParen,@poshNotTop containedin=ALLBUT,@poshNotTop'
 " ^-- containedin=poshBlockParameterList <-- adapted from Ruby--don't know if we need it.
 execute 'syntax region poshBraces      matchgroup=Delimiter start="{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshBrace,@poshNotTop containedin=ALLBUT,@poshNotTop'
