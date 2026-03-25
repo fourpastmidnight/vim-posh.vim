@@ -51,11 +51,13 @@ syntax case ignore
 syntax sync minlines=800
 syntax sync linebreaks=1
 
-syntax cluster poshNotTop contains=@poshStringNotTop,@poshStrings,poshComment,poshBlockComment,poshDQuotedMember,poshSQuotedMember,@Spell
+syntax cluster poshNotTop contains=@poshStringNotTop,@poshStrings,@poshComments,poshDQuotedMember,poshSQuotedMember,@Spell
 
 " Comments {{{1
 syntax match poshComment "#.*" keepend contains=@Spell
 syntax region poshBlockComment start="<#\_s*" end="\_s*#>" keepend contains=@Spell
+
+syntax cluster poshComments contains=poshComment,poshBlockComment
 
 " Strings {{{1
 
@@ -77,55 +79,55 @@ syntax cluster poshStringNotTop  contains=@poshStringSpecial
 " Identifiers {{{1
 let s:posh_autovars = '\%(\$\|?\|\^\|_\|args\|ConsoleFileName\|E\%(nabledExperimentalFeatures\|rror\|vent\%(Args\|Subscriber\)\?\|xecutionContext\)\|f\%(alse\|oreach\)\|H\%(OME\|ost\)\|input\|Is\%(CoreCLR\|Linux\|MacOS\|Windows\)\|LASTEXITCODE\|M\%(atches\|yInvocation\)\|NestedPromptLevel\|null\|P\%(ID\|ROFILE\|S\%(BoundParameters\|Cmdlet\|CommandPath\|Culture\|DebugContext\|Edition\|HOME\|Item\|ScriptRoot\|SenderInfo\|UICulture\|VersionTable\)\|WD\)\|S\%(ender\|hellId\|tackTrace\)\|switch\|t\%(his\|rue\)\)'
 
-execute 'syntax match poshVariable      "\%(`\)\@<!\$\%(\i\+:\)\?\%(' . s:posh_autovars . '\%(\i\)\@!\)\@!\i\+"  containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings contains=@poshAutoVars display'
-execute 'syntax match poshVariable      "\%(`\)\@<!\${\%(' . s:posh_autovars . '\}\)\@!\%(`[{}]\|[^}\r\n]\)\+}"  containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings contains=@poshAutoVars display'
-syntax match poshVariableScope "\%(`\)\@<!\%(\$\)\@<=\%(\i+:\)\ze\i"                                    containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshVariableScope "\%(`\)\@<!\%(\${\)\@<=\%(\i+:\)\ze\%(`[{}]\|[^}]\)"                     containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
+execute 'syntax match poshVariable      "\%(`\)\@<!\$\%(\i\+:\)\?\%(' . s:posh_autovars . '\%(\i\)\@!\)\@!\i\+"  containedin=ALLBUT,@poshComments,@poshSStrings contains=@poshAutoVars display'
+execute 'syntax match poshVariable      "\%(`\)\@<!\${\%(' . s:posh_autovars . '\}\)\@!\%(`[{}]\|[^}\r\n]\)\+}"  containedin=ALLBUT,@poshComments,@poshSStrings contains=@poshAutoVars display'
+syntax match poshVariableScope "\%(`\)\@<!\%(\$\)\@<=\%(\i+:\)\ze\i"                                    containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshVariableScope "\%(`\)\@<!\%(\${\)\@<=\%(\i+:\)\ze\%(`[{}]\|[^}]\)"                     containedin=ALLBUT,@poshComments,@poshSStrings display
 
 " PowerShell Automatic Variables {{{1
-syntax match poshAutoVarBoolean                    "\%(`\)\@<!\$\%(\%(tru\|fals\)e\%(\i\)\@!\|{\%(tru|fals\)e}\)"                            containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPlatform                   "\%(`\)\@<!\$\%(Is\%(Windows\|Linux\|MacOS\)\%(\i\)\@!\|{Is\%(Windows\|Linux\|MacOS\)}\)" containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarLastToken                  "\%(`\)\@<!\$\%(\$\%(\i\)\@!\|{\$}\)"                                                     containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarExecStatus                 "\%(`\)\@<!\$\%(\$\%(\i\)\@!\|{\?}\)"                                                     containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarFirstToken                 "\%(`\)\@<!\$\%(\^\%(\i\)\@!\|{\^}\)"                                                     containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSItem                     "\%(`\)\@<!\$\%(\%(_\|PSItem\)\%(\i\)\@!\|{\%(_\|PSItem\)}\)"                             containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAuotVarArgs                       "\%(`\)\@<!\$\%(args\%(\i\)\@!\|{args}\)"                                                 containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match pohAutoVarConsoleFileName             "\%(`\)\@<!\$\%(ConsoleFileName\%(\i\)\@!\|{ConsoleFileName}\)"                           containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarEnableExperimentalFeatures "\%(`\)\@<!\$\%(EnableExperimentalFeatures\%(\i\)\@!\|{EnableExperimentalFeatures}\)"     containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarError                      "\%(`\)\@<!\$\%(Error\%(\i\)\@!\|{Error}\)"                                               containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarEvent                      "\%(`\)\@<!\$\%(Event\%(\i\)\@!\|{Event}\)"                                               containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarEventArgs                  "\%(`\)\@<!\$\%(EventArgs\%(\i\)\@!\|{EventArgs}\)"                                       containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarEventSubscriber            "\%(`\)\@<!\$\%(EventSubscriber\%(\i\)\@!\|{EventSubscriber}\)"                           containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarExecutionContext           "\%(`\)\@<!\$\%(ExecutionContext\%(\i\)\@!\|{ExecutionContext}\)"                         containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarForeach                    "\%(`\)\@<!\$\%(foreach\%(\i\)\@!\|{foreach}\)"                                           containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarHOME                       "\%(`\)\@<!\$\%(HOME\%(\i\)\@!\|{HOME}\)"                                                 containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutovarHost                       "\%(`\)\@<!\$\%(Host\%(\i\)\@!\|{Host}\)"                                                 containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarInput                      "\%(`\)\@<!\$\%(input\%(\i\)\@!\|{input}\)"                                               containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarIsCoreCLR                  "\%(`\)\@<!\$\%(IsCoreCLR\%(\i\)\@!\|{IsCoreCLR}\)"                                       containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarLASTEXITCODE               "\%(`\)\@<!\$\%(LASTEXITCODE\%(\i\)\@!\|{LASTEXITCODE}\)"                                 containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarMatches                    "\%(`\)\@<!\$\%(Matches\%(\i\)\@!\|{Matches}\)"                                           containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarMyInvocation               "\%(`\)\@<!\$\%(MyInvocation\%(\i\)\@!\|{MyInvocation}\)"                                 containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarNestedPromptLevel          "\%(`\)\@<!\$\%(NeestedPromptLevel\%(\i\)\@!\|{NestedPromptLevel}\)"                      containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarNull                       "\%(`\)\@<!\$\%(null\%(\i\)\@!\|{null}\)"                                                 containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPID                        "\%(`\)\@<!\$\%(PID\%(\i\)\@!\|{PID}\)"                                                   containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPROFILE                    "\%(`\)\@<!\$\%(PROFILE\%(\i\)\@!\|{PROFILE}\)"                                           containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSBoundParameters          "\%(`\)\@<!\$\%(PSBoundParameters\%(\i\)\@!\|{PSBoundParameters}\)"                       containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSCmdlet                   "\%(`\)\@<!\$\%(PSCmdlet\%(\i\)\@!\|{PSCmdlet}\)"                                         containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSCommandPath              "\%(`\)\@<!\$\%(PSCommandPath\%(\i\)\@!\|{PSCommandPath}\)"                               containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSCulture                  "\%(`\)\@<!\$\%(PSCulture\%(\i\)\@!\|{PSCulture}\)"                                       containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSDebugContext             "\%(`\)\@<!\$\%(PSDebugContext\%(\i\)\@!\|{PSDebugContext}\)"                             containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSEdition                  "\%(`\)\@<!\$\%(PSEdition\%(\i\)\@!\|{PSEdition}\)"                                       containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSHOME                     "\%(`\)\@<!\$\%(PSHOME\%(\i\)\@!\|{PSHOME}\)"                                             containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSScriptRoot               "\%(`\)\@<!\$\%(PSScriptRoot\%(\i\)\@!\|{PSScriptRoot}\)"                                 containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSSenderInfo               "\%(`\)\@<!\$\%(PSSenderInfo\%(\i\)\@!\|{PSsenderInfo}\)"                                 containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSUICulture                "\%(`\)\@<!\$\%(PSUICulture\%(\i\)\@!\|{PSUICulture}\)"                                   containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarPSVersionTable             "\%(`\)\@<!\$\%(PSVersionTable\%(\i\)\@!\|{PSVersionTable}\)"                             containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poushAutoVarPWD                       "\%(`\)\@<!\$\%(PWD\%(\i\)\@!\|{PID}\)"                                                   containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarSender                     "\%(`\)\@<!\$\%(Sender\%(\i\)\@!\|{Sender}\)"                                             containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarShellId                    "\%(`\)\@<!\$\%(ShellId\%(\i\)\@!\|{ShellId}\)"                                           containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarStackTrace                 "\%(`\)\@<!\$\%(StackTrace\%(\i\)\@!\|{StackTrace}\)"                                     containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarSwitch                     "\%(`\)\@<!\$\%(switch\%(\i\)\@!\|{switch}\)"                                             containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
-syntax match poshAutoVarThis                       "\%(`\)\@<!\$\%(this\%(\i\)\@!\|{this}\)"                                                 containedin=ALLBUT,poshComment,poshBlockComment,@poshSStrings display
+syntax match poshAutoVarBoolean                    "\%(`\)\@<!\$\%(\%(tru\|fals\)e\%(\i\)\@!\|{\%(tru|fals\)e}\)"                            containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPlatform                   "\%(`\)\@<!\$\%(Is\%(Windows\|Linux\|MacOS\)\%(\i\)\@!\|{Is\%(Windows\|Linux\|MacOS\)}\)" containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarLastToken                  "\%(`\)\@<!\$\%(\$\%(\i\)\@!\|{\$}\)"                                                     containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarExecStatus                 "\%(`\)\@<!\$\%(\$\%(\i\)\@!\|{\?}\)"                                                     containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarFirstToken                 "\%(`\)\@<!\$\%(\^\%(\i\)\@!\|{\^}\)"                                                     containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSItem                     "\%(`\)\@<!\$\%(\%(_\|PSItem\)\%(\i\)\@!\|{\%(_\|PSItem\)}\)"                             containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAuotVarArgs                       "\%(`\)\@<!\$\%(args\%(\i\)\@!\|{args}\)"                                                 containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match pohAutoVarConsoleFileName             "\%(`\)\@<!\$\%(ConsoleFileName\%(\i\)\@!\|{ConsoleFileName}\)"                           containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarEnableExperimentalFeatures "\%(`\)\@<!\$\%(EnableExperimentalFeatures\%(\i\)\@!\|{EnableExperimentalFeatures}\)"     containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarError                      "\%(`\)\@<!\$\%(Error\%(\i\)\@!\|{Error}\)"                                               containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarEvent                      "\%(`\)\@<!\$\%(Event\%(\i\)\@!\|{Event}\)"                                               containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarEventArgs                  "\%(`\)\@<!\$\%(EventArgs\%(\i\)\@!\|{EventArgs}\)"                                       containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarEventSubscriber            "\%(`\)\@<!\$\%(EventSubscriber\%(\i\)\@!\|{EventSubscriber}\)"                           containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarExecutionContext           "\%(`\)\@<!\$\%(ExecutionContext\%(\i\)\@!\|{ExecutionContext}\)"                         containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarForeach                    "\%(`\)\@<!\$\%(foreach\%(\i\)\@!\|{foreach}\)"                                           containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarHOME                       "\%(`\)\@<!\$\%(HOME\%(\i\)\@!\|{HOME}\)"                                                 containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutovarHost                       "\%(`\)\@<!\$\%(Host\%(\i\)\@!\|{Host}\)"                                                 containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarInput                      "\%(`\)\@<!\$\%(input\%(\i\)\@!\|{input}\)"                                               containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarIsCoreCLR                  "\%(`\)\@<!\$\%(IsCoreCLR\%(\i\)\@!\|{IsCoreCLR}\)"                                       containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarLASTEXITCODE               "\%(`\)\@<!\$\%(LASTEXITCODE\%(\i\)\@!\|{LASTEXITCODE}\)"                                 containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarMatches                    "\%(`\)\@<!\$\%(Matches\%(\i\)\@!\|{Matches}\)"                                           containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarMyInvocation               "\%(`\)\@<!\$\%(MyInvocation\%(\i\)\@!\|{MyInvocation}\)"                                 containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarNestedPromptLevel          "\%(`\)\@<!\$\%(NeestedPromptLevel\%(\i\)\@!\|{NestedPromptLevel}\)"                      containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarNull                       "\%(`\)\@<!\$\%(null\%(\i\)\@!\|{null}\)"                                                 containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPID                        "\%(`\)\@<!\$\%(PID\%(\i\)\@!\|{PID}\)"                                                   containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPROFILE                    "\%(`\)\@<!\$\%(PROFILE\%(\i\)\@!\|{PROFILE}\)"                                           containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSBoundParameters          "\%(`\)\@<!\$\%(PSBoundParameters\%(\i\)\@!\|{PSBoundParameters}\)"                       containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSCmdlet                   "\%(`\)\@<!\$\%(PSCmdlet\%(\i\)\@!\|{PSCmdlet}\)"                                         containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSCommandPath              "\%(`\)\@<!\$\%(PSCommandPath\%(\i\)\@!\|{PSCommandPath}\)"                               containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSCulture                  "\%(`\)\@<!\$\%(PSCulture\%(\i\)\@!\|{PSCulture}\)"                                       containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSDebugContext             "\%(`\)\@<!\$\%(PSDebugContext\%(\i\)\@!\|{PSDebugContext}\)"                             containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSEdition                  "\%(`\)\@<!\$\%(PSEdition\%(\i\)\@!\|{PSEdition}\)"                                       containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSHOME                     "\%(`\)\@<!\$\%(PSHOME\%(\i\)\@!\|{PSHOME}\)"                                             containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSScriptRoot               "\%(`\)\@<!\$\%(PSScriptRoot\%(\i\)\@!\|{PSScriptRoot}\)"                                 containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSSenderInfo               "\%(`\)\@<!\$\%(PSSenderInfo\%(\i\)\@!\|{PSsenderInfo}\)"                                 containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSUICulture                "\%(`\)\@<!\$\%(PSUICulture\%(\i\)\@!\|{PSUICulture}\)"                                   containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarPSVersionTable             "\%(`\)\@<!\$\%(PSVersionTable\%(\i\)\@!\|{PSVersionTable}\)"                             containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poushAutoVarPWD                       "\%(`\)\@<!\$\%(PWD\%(\i\)\@!\|{PID}\)"                                                   containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarSender                     "\%(`\)\@<!\$\%(Sender\%(\i\)\@!\|{Sender}\)"                                             containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarShellId                    "\%(`\)\@<!\$\%(ShellId\%(\i\)\@!\|{ShellId}\)"                                           containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarStackTrace                 "\%(`\)\@<!\$\%(StackTrace\%(\i\)\@!\|{StackTrace}\)"                                     containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarSwitch                     "\%(`\)\@<!\$\%(switch\%(\i\)\@!\|{switch}\)"                                             containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarThis                       "\%(`\)\@<!\$\%(this\%(\i\)\@!\|{this}\)"                                                 containedin=ALLBUT,@poshComments,@poshSStrings display
 
 syntax cluster poshAutoVars contains=poshAutovarBoolean,poshAutovarPlatform,poshAutoVarLastToken,poshAutoVarExecStatus,poshAutoVarFirstToken,poshAutoVarPSItem,poshAutoVarArgs,poshAutoVarConsoleFileName,poshAutoVarEnableExperimentalFeatures,poshAutoVarError,poshAutoVarEvent,poushAutoVarEventArgs,poshAutoVarEventSubscriber,poshAutoVarExecutionContext,poshAutoVarForeach,poshAutoVarHOME,poshAutoVarHost,poshAutoVarInput,poshAutoVarIsCoreCLR,poshAutoVarLASTEXITCODE,poshAutoVarMatches,poshAutoVarMyInvocation,poshAutoVarNestedPromptLevel,poshAutoVarNull,poshAutoVarPID,poshAutoVarPROFILE,poshAutoVarPSBoundParameters,poshAutoVarPSCmdlet,poshAutoVarPSCommandPath,poshAutoVarPSCulture,poshAutoVarPSDebugContext,poshAutoVarPSEdition,poshAutoVarPSHOME,poshAutoVarPSScriptRoot,poshAutoVarPSSenderInfo,poshAutoVarPSUICulture,poshAutoVarPSVersionTable,poshAutoVarPWD,poshAutoVarSender,poshAutoVarShellId,poshAutoVarStackTrace,poshAutoVarSwitch,poshAutoVarThis
 
