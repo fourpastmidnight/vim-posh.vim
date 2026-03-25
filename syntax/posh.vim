@@ -52,6 +52,7 @@ syntax sync minlines=800
 syntax sync linebreaks=1
 
 syntax cluster poshNotTop contains=@poshStringNotTop,@poshStrings,@poshComments,poshDQuotedMember,poshSQuotedMember,@Spell
+syntax cluster poshNotTopInterpolation contains=@poshComments,poshDQuotedMember,poshSQuotedMember,@Spell
 
 " Comments {{{1
 syntax match poshComment "#.*" keepend contains=@Spell
@@ -67,9 +68,9 @@ syntax match poshStringDEscape      '`u{0-9A-Fa-f]\{1,6\}}' contained
 syntax cluster poshEscapeSequences  contains=poshStringDEscape,poshStringDEscapeOther
 
 
-syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=@Spell,poshStringDEscape
+syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=@poshStringSpecial,@Spell,poshStringDEscape
 syntax region poshStringS     start="'"   skip="''" end="'"   keepend
-syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=@Spell,poshStringDEscape
+syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=@poshStringSpecial,@Spell,poshStringDEscape
 syntax region poshHereStringS start="@'$"           end="^'@" keepend
 
 syntax cluster poshDStrings      contains=poshStringD,poshHereStringD
@@ -139,13 +140,11 @@ syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip=
 syntax match poshBracesDelim      "[{}]" containedin=ALLBUT,@poshNotTop,poshVariable display
 syntax match poshParenthesesDelim "[()]" containedin=ALLBUT,@poshNottop,poshVariable display
 
-let s:ps_islands = '\%(@''\_.\{-}''@\|@"\_.\{-}"@\|''\%(''''\|[^'']\)*''\|"\%(`.\|[^"]\)*"\|<#\_.\{-}#>\)'
-execute 'syntax region poshSubExpr matchgroup=Delimiter start="\%(`\)\@<!\$(" end=")" skip=/' . s:ps_islands . '/ transparent keepend contains=@poshNotTop,poshVariable,poshBraceDelim,poshParentesesDelim containedin=ALLBUT,@poshComments,@poshSStrings'
-execute 'syntax region poshSubParen matchgroup=Delimiter start="(" end=")" skip=/' . s:ps_islands . '/ transparent keepend contains=poshSubParen,@poshNotTop,poshVariable,poshBraceDelim,poshParenthesesDelim contained'
+syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" contained contains=ALLBUT,@poshNotTopInterpolation
+syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolation end=")" transparent contained
+syntax cluster poshStringSpecial contains=@poshEscapeSequences,poshInterpolation,poshVariable,@poshAutoVars,@Spell
 
-
-syntax match poshHashTableSigil   "@\ze{" nextgroup=poshBraces      containedin=ALLBUT,@poshNotTop display
-syntax match poshArraySigil       "@\ze(" nextgroup=poshParentheses containedin=ALLBUT,@poshNotTop display
+syntax match poshAtSigil   "@\[{(]" containedin=ALLBUT,@poshNotTop display
 
 hi def link poshComment        Comment
 hi def link poshBlockComment   Comment
@@ -208,6 +207,7 @@ hi def link poshAutoVarThis                       Special
 hi def link poshBracesDelim                       Delimiter
 hi def link poshParenthesesDelim                  Delimiter
 hi def link poshSubExpr                           Delimiter
+hi def link poshInterpolationDelimiter            Delimiter
 hi def link poshHashTableSigil                    Delimiter
 hi def link poshArraySigil                        Delimiter
 
