@@ -137,13 +137,13 @@ syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip=
 syntax match poshBracesDelim      "[{}]" containedin=ALLBUT,@poshNotTop,poshVariable display
 syntax match poshParenthesesDelim "[()]" containedin=ALLBUT,@poshNottop,poshVariable display
 
-syntax match poshHashTableSigil  "@\ze{" nextgroup=poshBraces      containedin=ALLBUT,@poshNotTop display
-syntax match poshArraySigil      "@\ze(" nextgroup=poshParentheses containedin=ALLBUT,@poshNotTop display
+let s:ps_islands = '\%(@''\_.\{-}''@\|@"\_.\{-}"@\|''\%(''''\|[^'']\)*''\|"\%(`.\|[^"]\)*"\|<#\_.\{-}#>\)'
+execute 'syntax region poshSubExpr matchgroup=Delimiter start="\%(`\)\@<!\$(" end=")" skip=/' . s:ps_islands . '/ transparent keepend contains=@poshNotTop,poshVariable,poshBraceDelim,poshParentesesDelim containedin=ALLBUT,@poshComments,@poshSStrings'
+execute 'syntax region poshSubParen matchgroup=Delimiter start="(" end=")" skip=/' . s:ps_islands . '/ transparent keepend contains=poshSubParen,@poshNotTop,poshVariable,poshBraceDelim,poshParenthesesDelim contained'
 
-"syntax sync match poshSyncHashtableOpen  grouphere poshBraces      "@{"
-"syntax sync match poshSyncHashtableClose grouphere NONE            "}"
-"syntax sync match poshOpenSyncArrayOpen  grouphere poshParentheses "@("
-"syntax sync match poshOpenSyncArrayClose grouphere NONE            ")"
+
+syntax match poshHashTableSigil   "@\ze{" nextgroup=poshBraces      containedin=ALLBUT,@poshNotTop display
+syntax match poshArraySigil       "@\ze(" nextgroup=poshParentheses containedin=ALLBUT,@poshNotTop display
 
 hi def link poshComment        Comment
 hi def link poshBlockComment   Comment
@@ -204,6 +204,7 @@ hi def link poshAutoVarThis                       Special
 
 hi def link poshBracesDelim                       Delimiter
 hi def link poshParenthesesDelim                  Delimiter
+hi def link poshSubExpr                           Delimiter
 hi def link poshHashTableSigil                    Delimiter
 hi def link poshArraySigil                        Delimiter
 
