@@ -129,16 +129,12 @@ syntax cluster poshAutoVars contains=poshAutovarBoolean,poshAutovarPlatform,posh
 syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip="''" end="'" keepend contains=NONE containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,poshStringD,poshStringS,poshHereStringD,poshHereStringS,poshBlockComment
 
-let s:ps_skip = '\%(@''\_.\{-}''@\|@"\_.\{-}"@\|''\%(''''\|[^'']\)*''\|"\%(`.\|[^"]\)*"\|<#\_.\{-}#>\|#.*$\|\${\%(`[{}]\|[^}\r\n]\)\+\)'
-execute 'syntax region poshParentheses matchgroup=Delimiter start="(" end=")" skip=/' . s:ps_skip . '/ transparent keepend contains=poshParen,@poshNotTop'
-" ^-- containedin=poshBlockParameterList <-- adapted from Ruby--don't know if we need it.
-execute 'syntax region poshBraces      matchgroup=Delimiter start="{" end="}" skip=/' . s:ps_skip . '/ transparent keepend contains=poshBrace,@poshNotTop'
+syntax match poshBracesDelim      "[{}]" containedin=ALLBUT,@poshNotTop,poshVariable display
+syntax match poshParenthesesDelim "[()]" containedin=ALLBUT,@poshNottop,poshVariable display
 
 syntax match poshHashTableSigil  "@\ze{" nextgroup=poshBraces      containedin=ALLBUT,@poshNotTop display
 syntax match poshArraySigil      "@\ze(" nextgroup=poshParentheses containedin=ALLBUT,@poshNotTop display
 
-syntax sync match poshSyncBraceOpen      grouphere poshBraces      "{"
-syntax sync match poshSyncBraceClose     grouphere NONE            "}"
 "syntax sync match poshSyncHashtableOpen  grouphere poshBraces      "@{"
 "syntax sync match poshSyncHashtableClose grouphere NONE            "}"
 "syntax sync match poshOpenSyncArrayOpen  grouphere poshParentheses "@("
@@ -201,6 +197,8 @@ hi def link poshAutoVarStackTrace                 Debug
 hi def link poshAutovarSwitch                     Special
 hi def link poshAutoVarThis                       Special
 
+hi def link poshBracesDelim                       Delimiter
+hi def link poshParenthesesDelim                  Delimiter
 hi def link poshHashTableSigil                    Delimiter
 hi def link poshArraySigil                        Delimiter
 
