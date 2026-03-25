@@ -61,8 +61,10 @@ syntax cluster poshComments contains=poshComment,poshBlockComment
 
 " Strings {{{1
 
-syntax match poshStringDEscape '`[0abefnrtv"`“”\$]' contained
-syntax match poshStringDEscape '`u{0-9A-Fa-f]\{1,6\}}' contained
+syntax match poshStringDEscapeOther '`.' contained
+syntax match poshStringDEscape      '`[0abefnrtv"`“”\$]' contained
+syntax match poshStringDEscape      '`u{0-9A-Fa-f]\{1,6\}}' contained
+syntax cluster poshEscapeSequences  contains=poshStringDEscape,poshStringDEscapeOther
 
 
 syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=@Spell,poshStringDEscape
@@ -148,14 +150,15 @@ syntax match poshArraySigil       "@\ze(" nextgroup=poshParentheses containedin=
 hi def link poshComment        Comment
 hi def link poshBlockComment   Comment
 
-hi def link poshQuotedMember   String
-hi def link poshDQuotedMember  String
-hi def link poshSQuotedMember  String
-hi def link poshStringDEscape  SpecialChar
-hi def link poshStringD        String
-hi def link poshStringS        String
-hi def link poshVariable       Identifier
-hi def link poshVariableScope  StorageClass
+hi def link poshQuotedMember       String
+hi def link poshDQuotedMember      String
+hi def link poshSQuotedMember      String
+hi def link poshStringDEscapeOther Char
+hi def link poshStringDEscape      SpecialChar
+hi def link poshStringD            String
+hi def link poshStringS            String
+hi def link poshVariable           Identifier
+hi def link poshVariableScope      StorageClass
 
 hi def link poshAutoVarBoolean                    Boolean
 hi def link poshAutoVarPlatform                   Boolean
