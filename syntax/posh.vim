@@ -76,8 +76,8 @@ let s:posh_autovars = '\%(\$\|?\|\^\|_\|args\|ConsoleFileName\|E\%(nabledExperim
 
 execute 'syntax match poshVariable      "\%(`\)\@<!\$\%(\i\+:\)\?\%(' . s:posh_autovars . '\%(\i\)\@!\)\@!\i\+"  containedin=ALLBUT,poshComment,poshBlockComment,poshStringS,poshHereStringS contains=@poshAutoVars display'
 execute 'syntax match poshVariable      "\%(`\)\@<!\${\%(' . s:posh_autovars . '\}\)\@!\%(`[{}]\|[^}\r\n]\)\+}"  containedin=ALLBUT,poshComment,poshBlockComment,poshStringS,poshHereStringS contains=@poshAutoVars display'
-syntax match poshVariableScope "\%(`\)\@<!\%(\$\)\@<=\%(\i+:\)\ze\i"                                    containedin=ALLBUT,poshComment,poshBlockComment,poshStringS,poshHereStringS display
-syntax match poshVariableScope "\%(`\)\@<!\%(\${\)\@<=\%(\i+:\)\ze\%(`[{}]\|[^}]\)"                     containedin=ALLBUT,poshComment,poshBlockComment,poshStringS,poshHereStringS display
+syntax match poshVariableScope          "\%(`\)\@<!\%(\$\)\@<=\%(\i+:\)\ze\i"                                    containedin=ALLBUT,poshComment,poshBlockComment,poshStringS,poshHereStringS display
+syntax match poshVariableScope          "\%(`\)\@<!\%(\${\)\@<=\%(\i+:\)\ze\%(`[{}]\|[^}]\)"                     containedin=ALLBUT,poshComment,poshBlockComment,poshStringS,poshHereStringS display
 
 " PowerShell Automatic Variables {{{1
 syntax match poshAutoVarBoolean                    "\%(`\)\@<!\$\%(\%(tru\|fals\)e\%(\i\)\@!\|{\%(tru|fals\)e}\)"                            containedin=ALLBUT,poshComment,poshBlockComment,poshStringS,poshHereStringS display
