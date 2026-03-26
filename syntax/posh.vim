@@ -78,6 +78,12 @@ syntax cluster poshStrings       contains=@poshDStrings,@poshSStrings
 syntax cluster poshStringSpecial contains=poshStringDEscape
 syntax cluster poshStringNotTop  contains=@poshStringSpecial
 
+" Attributes {{{1
+syntax match  poshAttributeHead  /\%([A-Za-z0-9_]\|[]$)}'".]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)\s*\ze(/ containedin=ALLBUT,@poshNotTop nextgroup=poshAttributeArgs skipwhite display
+syntax region poshAttributeArgs  matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALL nextgroup=poshAttributeClose skipwhite display
+syntax match  poshAttributeClose "]" contained display
+syntax match  poshType           /\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]/                   containedin=ALLBUT,@poshNotTop display
+
 " Identifiers {{{1
 let s:posh_autovars = '\%(\$\|?\|\^\|_\|args\|ConsoleFileName\|E\%(nabledExperimentalFeatures\|rror\|vent\%(Args\|Subscriber\)\?\|xecutionContext\)\|f\%(alse\|oreach\)\|H\%(OME\|ost\)\|input\|Is\%(CoreCLR\|Linux\|MacOS\|Windows\)\|LASTEXITCODE\|M\%(atches\|yInvocation\)\|NestedPromptLevel\|null\|P\%(ID\|ROFILE\|S\%(BoundParameters\|Cmdlet\|CommandPath\|Culture\|DebugContext\|Edition\|HOME\|Item\|ScriptRoot\|SenderInfo\|UICulture\|VersionTable\)\|WD\)\|S\%(ender\|hellId\|tackTrace\)\|switch\|t\%(his\|rue\)\)'
 
@@ -209,6 +215,10 @@ hi def link poshSubExpr                           Delimiter
 hi def link poshInterpolationDelimiter            Delimiter
 hi def link poshHashTableSigil                    Delimiter
 hi def link poshArraySigil                        Delimiter
+
+hi def link poshAttributeHead                     PreProc
+hi def link poshAttributeClose                    PreProc
+hi def link poshType                              Type
 
 let b:current_syntax = "posh"
 let &cpo = s:cpo_sav | unlet s:cpo_sav
