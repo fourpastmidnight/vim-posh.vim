@@ -67,7 +67,6 @@ syntax match poshStringDEscape      '`[0abefnrtv"`“”\$]' contained
 syntax match poshStringDEscape      '`u{0-9A-Fa-f]\{1,6\}}' contained
 syntax cluster poshEscapeSequences  contains=poshStringDEscape,poshStringDEscapeOther
 
-
 syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=@poshStringSpecial,@Spell,poshStringDEscape
 syntax region poshStringS     start="'"   skip="''" end="'"   keepend
 syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=@poshStringSpecial,@Spell,poshStringDEscape
