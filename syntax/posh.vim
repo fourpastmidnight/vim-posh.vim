@@ -146,7 +146,7 @@ syntax match poshBracesDelim      "[{}]" containedin=ALLBUT,@poshNotTop,poshVari
 syntax match poshParenthesesDelim "[()]" containedin=ALLBUT,@poshNottop,poshVariable display
 
 syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" contained contains=ALLBUT,@poshNotTopInterpolation
-syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolation end=")" transparent contained
+syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained
 syntax cluster poshStringSpecial contains=@poshEscapeSequences,poshInterpolation,poshVariable,@poshAutoVars,@Spell
 
 syntax match poshAtSigil   "@\[{(]" containedin=ALLBUT,@poshNotTop display
