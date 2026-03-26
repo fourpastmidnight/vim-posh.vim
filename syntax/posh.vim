@@ -149,7 +149,7 @@ syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%
 syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained
 syntax cluster poshStringSpecial contains=@poshEscapeSequences,poshInterpolation,poshVariable,@poshAutoVars,@Spell
 
-syntax match poshAtSigil   "@\[{(]" containedin=ALLBUT,@poshNotTop display
+syntax match poshAtSigil   "@[{(]" display
 
 hi def link poshComment        Comment
 hi def link poshBlockComment   Comment
@@ -213,8 +213,7 @@ hi def link poshBracesDelim                       Delimiter
 hi def link poshParenthesesDelim                  Delimiter
 hi def link poshSubExpr                           Delimiter
 hi def link poshInterpolationDelimiter            Delimiter
-hi def link poshHashTableSigil                    Delimiter
-hi def link poshArraySigil                        Delimiter
+hi def link poshAtSigil                           Delimiter
 
 hi def link poshAttributeHead                     PreProc
 hi def link poshAttributeClose                    PreProc
