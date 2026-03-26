@@ -151,6 +151,8 @@ syntax cluster poshStringSpecial contains=@poshEscapeSequences,poshInterpolation
 
 syntax match poshAtSigil   "@[{(]" display
 
+syntax match poshNumber    "\<\%(0[xX][0-9A-Fa-f]\+\|0[bB][01]\+\|\d\?\.\d\?\%([eE][+-]\?\d\+\)\=\|\d\+[eE][+-]\?\d\+\|\d\+\)\%(uy\|y\|us\|s\|ul\|l\|u\|n\|d\)\?\%([kKmMgGtTpP][bB]\)\?\>" containedin=ALLBUT,@poshComments,@poshStrings
+
 hi def link poshComment        Comment
 hi def link poshBlockComment   Comment
 
@@ -208,6 +210,8 @@ hi def link poshAutovarShellId                    Number
 hi def link poshAutoVarStackTrace                 Debug
 hi def link poshAutovarSwitch                     Special
 hi def link poshAutoVarThis                       Special
+
+hi def link poshNumber                            Number
 
 hi def link poshBracesDelim                       Delimiter
 hi def link poshParenthesesDelim                  Delimiter
