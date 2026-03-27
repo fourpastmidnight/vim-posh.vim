@@ -55,8 +55,9 @@ syntax cluster poshNotTop contains=@poshStringNotTop,@poshStrings,@poshComments,
 syntax cluster poshNotTopInterpolation contains=@poshComments,poshDQuotedMember,poshSQuotedMember,@Spell
 
 " Comments {{{1
-syntax match poshComment "#.*" keepend contains=@Spell
-syntax region poshBlockComment start="<#\_s*" end="\_s*#>" keepend contains=@Spell
+syntax keyword poshCommentTodo FIXME HACK NOTE TBD TODO UNDONE XXX contained
+syntax match   poshComment "#.*" keepend contains=@Spell,poshCommentTodo
+syntax region  poshBlockComment start="<#\_s*" end="\_s*#>" keepend contains=@Spell,poshCommentTodo
 
 syntax cluster poshComments contains=poshComment,poshBlockComment
 
@@ -189,6 +190,7 @@ syntax match poshNumber    "\<\%(0[xX][0-9A-Fa-f]\+\|0[bB][01]\+\|\d\?\.\d\?\%([
 
 hi def link poshComment                                        Comment
 hi def link poshBlockComment                                   Comment
+hi def link poshCommentTodo                                    Todo
 
 hi def link poshQuotedMember                                   String
 hi def link poshDQuotedMember                                  String
