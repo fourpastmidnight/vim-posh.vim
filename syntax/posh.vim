@@ -62,7 +62,6 @@ syntax region  poshBlockComment start="<#\_s*" end="\_s*#>" keepend contains=@Sp
 syntax cluster poshComments contains=poshComment,poshBlockComment
 
 " Strings {{{1
-
 syntax match poshStringDEscapeOther '`.' contained
 syntax match poshStringDEscape      '`[0abefnrtv"`“”\$]' contained
 syntax match poshStringDEscape      '`u{0-9A-Fa-f]\{1,6\}}' contained
@@ -78,12 +77,6 @@ syntax cluster poshSStrings      contains=poshStringS,poshHereStringS
 syntax cluster poshStrings       contains=@poshDStrings,@poshSStrings
 syntax cluster poshStringSpecial contains=poshStringDEscape
 syntax cluster poshStringNotTop  contains=@poshStringSpecial
-
-" Attributes {{{1
-syntax match  poshAttributeHead  /\%([A-Za-z0-9_]\|[]$)}'".]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)\s*\ze(/ containedin=ALLBUT,@poshNotTop nextgroup=poshAttributeArgs skipwhite display
-syntax region poshAttributeArgs  matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALL nextgroup=poshAttributeClose skipwhite display
-syntax match  poshAttributeClose "]" contained display
-syntax match  poshType           /\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]/                   containedin=ALLBUT,@poshNotTop display
 
 " Identifiers {{{1
 let s:posh_autovars = '\%(\$\|?\|\^\|_\|args\|ConsoleFileName\|E\%(nabledExperimentalFeatures\|rror\|vent\%(Args\|Subscriber\)\?\|xecutionContext\)\|f\%(alse\|oreach\)\|H\%(OME\|ost\)\|input\|Is\%(CoreCLR\|Linux\|MacOS\|Windows\)\|LASTEXITCODE\|M\%(atches\|yInvocation\)\|NestedPromptLevel\|null\|P\%(ID\|ROFILE\|S\%(BoundParameters\|Cmdlet\|CommandPath\|Culture\|DebugContext\|Edition\|HOME\|Item\|ScriptRoot\|SenderInfo\|UICulture\|VersionTable\)\|WD\)\|S\%(ender\|hellId\|tackTrace\)\|switch\|t\%(his\|rue\)\)'
@@ -177,9 +170,18 @@ syntax cluster poshPrefVars contains=poshPrefVarConfirmPreference,poshPrefVarDeb
 syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip="''" end="'" keepend contains=NONE containedin=ALLBUT,@poshStrings,poshBlockComment
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,@poshStrings,poshBlockComment
 
-syntax match poshBracesDelim      "[{}]"   containedin=ALLBUT,@poshNotTop,poshVariable display
-syntax match poshParenthesesDelim "[()]"   containedin=ALLBUT,@poshNottop,poshVariable display
-syntax match poshBracketsDelim    "[\[\]]" containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeClose display
+syntax match poshBracesDelim            "[{}]"                                                                    containedin=ALLBUT,@poshNotTop,poshVariable display
+syntax match poshParenthesesDelim       "[()]"                                                                    containedin=ALLBUT,@poshNottop,poshVariable display
+syntax match poshBracketsDelim          "\%(\%(\.[A-Za-z_][A-Za-z-0-9_]*\)\@<!\[\|\[\%([A-Za-z_]\)\@!\)"          containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
+syntax match poshBarkcetsDelim          "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<!\]"             containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
+syntax match poshDotGenericBracketOpen  "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<=\[\ze[A-Za-z_]" containedin=ALLBUT,@poshNotTop,poshVariable display
+syntax match poshDotGenericBracketClose "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<=\]"             containedin=ALLBUT,@poshNotTop,poshVariable display
+
+" Attributes {{{1
+syntax match  poshAttributeHead   /\%([A-Za-z0-9_]\|[]$)}'".]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)\s*\ze(/ containedin=ALLBUT,@poshNotTop nextgroup=poshAttributeArgs skipwhite display
+syntax region poshAttributeArgs   matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALL nextgroup=poshAttributeClose skipwhite display
+syntax match  poshAttributeClose  "]" contained display
+syntax match  poshType            "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,poshSStrings display
 
 syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" contained contains=ALLBUT,@poshNotTopInterpolation
 syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained
@@ -289,6 +291,8 @@ hi def link poshAtSigil                                        Delimiter
 hi def link poshAttributeHead                                  PreProc
 hi def link poshAttributeClose                                 PreProc
 hi def link poshType                                           Type
+hi def link poshDotGenericBracketOpen                          Normal
+hi def link poshDotGenericBracketClose                         Normal
 
 let b:current_syntax = "posh"
 let &cpo = s:cpo_sav | unlet s:cpo_sav
