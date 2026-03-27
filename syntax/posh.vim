@@ -177,8 +177,9 @@ syntax cluster poshPrefVars contains=poshPrefVarConfirmPreference,poshPrefVarDeb
 syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip="''" end="'" keepend contains=NONE containedin=ALLBUT,@poshStrings,poshBlockComment
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,@poshStrings,poshBlockComment
 
-syntax match poshBracesDelim      "[{}]" containedin=ALLBUT,@poshNotTop,poshVariable display
-syntax match poshParenthesesDelim "[()]" containedin=ALLBUT,@poshNottop,poshVariable display
+syntax match poshBracesDelim      "[{}]"   containedin=ALLBUT,@poshNotTop,poshVariable display
+syntax match poshParenthesesDelim "[()]"   containedin=ALLBUT,@poshNottop,poshVariable display
+syntax match poshBracketsDelim    "[\[\]]" containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeClose display
 
 syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" contained contains=ALLBUT,@poshNotTopInterpolation
 syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained
@@ -279,6 +280,7 @@ hi def link poshPrefVarWhatIfPreference                        Special
 hi def link poshNumber                                         Number
 
 hi def link poshBracesDelim                                    Delimiter
+hi def link poshBracketsDelim                                  Delimiter
 hi def link poshParenthesesDelim                               Delimiter
 hi def link poshSubExpr                                        Delimiter
 hi def link poshInterpolationDelimiter                         Delimiter
