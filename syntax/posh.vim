@@ -60,20 +60,22 @@ syntax keyword poshKeywords
   \ var while inlinescript parallel sequence workflow
 
 syntax match poshArithmeticOperator            "[-+\*/%]"
-syntax match poshBitwiseOperator               "-\%(b\%(and\|x\?or\|not\)\|sh[lr]\)"
+syntax match poshBitwiseOperator               "\<-\%(b\%(and\|x\?or\|not\)\|sh[lr]\)\>"
 syntax match poshAssignmentOperator            "\%([-+\*/%]\|??\)\?="
-syntax match poshComparisonOperator            "-[ci]\?\%(eq\|ne\|g[te]\|l[te]\)"
-syntax match poshContainmentComparisonOperator "-\%(not\)\?\%(contains\|in\|like\)"
-syntax match poshTypeOperator                  "-\%(as\|is\%(not\)\?\)"
-syntax match poshLogicalOperator               "-\%(and\|x\?or\|not\)\|!"
+syntax match poshComparisonOperator            "\<-[ci]\?\%(eq\|ne\|g[te]\|l[te]\)\>"
+syntax match poshContainmentComparisonOperator "\<-\%(not\)\?\%(contains\|in\|like\)\>"
+syntax match poshMatchOperator                 "\<-[ci]\%(not\)\?match\>"
+syntax match poshReplaceOperator               "\<-[ci]replace\>"
+syntax match poshTypeOperator                  "\<-\%(as\|is\%(not\)\?\)\>"
+syntax match poshLogicalOperator               "\<-\%(and\|x\?or\|not\)\>\|!"
 syntax match poshRedirectionOperator           "[1-6\*]>>\?\%(&1\)\?"
-syntax match poshSplitJoinOperator             "-\%([ci]split\|join\)"
-syntax match poshFormatOperator                "-f"
+syntax match poshSplitJoinOperator             "\<-\%([ci]split\|join\)\>"
+syntax match poshFormatOperator                "\<-f\>"
 syntax match poshUnaryOperator                 "++\|--"
 syntax match poshMiscOperator                  ",\|&\|\.\.\?\|::\|??\|?\ze\%([.\[]\)\@="
 syntax match poshPipelineOperator              "||\?\|&&"
 
-syntax cluster poshOperators contains=poshArithmeticOperator,poshBitwiseOperator,poshAssignmentOperator,poshComparisonOperator,poshContainmentComparisonOperator,poshTypeOperator,poshLogicalOperator,poshRedirectionOperator,poshSplitJoinOperator,poshFormatOperator,poshUnaryOperator,poshMiscOperator,poshPipelineOperator
+syntax cluster poshOperators contains=poshArithmeticOperator,poshBitwiseOperator,poshAssignmentOperator,poshComparisonOperator,poshContainmentComparisonOperator,poshMatchOperator,poshReplaceOperator,poshTypeOperator,poshLogicalOperator,poshRedirectionOperator,poshSplitJoinOperator,poshFormatOperator,poshUnaryOperator,poshMiscOperator,poshPipelineOperator
 
 " Comments {{{1
 syntax keyword poshCommentTodo FIXME HACK NOTE TBD TODO UNDONE XXX contained
@@ -322,6 +324,8 @@ hi def link poshBitwiseOperator                                Operator
 hi def link poshAssignmentOperator                             Operator
 hi def link poshComparisonOperator                             Operator
 hi def link poshContainmentComparisonOperator                  Operator
+hi def link poshMatchOperator                                  Operator
+hi def link poshReplaceOperator                                Operator
 hi def link poshTypeOperator                                   Operator
 hi def link poshLogicalOperator                                Operator
 hi def link poshRedirectionOperator                            Operator
