@@ -59,6 +59,12 @@ syntax keyword poshKeywords
   \ for foreach from function hidden if in param process return static switch throw trap try until using
   \ var while inlinescript parallel sequence workflow
 
+syntax match poshArithmeticOperator "[-+\*/%]"
+syntax match poshBitwiseOperator    "-\%(b\%(and\|x\?or\|not\)\|sh[lr]\)"
+syntax match poshAssignmentOperator "[-+\*/%]\?="
+
+syntax cluster poshOperators contains=poshArithmeticOperator,poshBitwiseOperator,poshAssignmentOperator
+
 " Comments {{{1
 syntax keyword poshCommentTodo FIXME HACK NOTE TBD TODO UNDONE XXX contained
 syntax match   poshComment "#.*" keepend contains=@Spell,poshCommentTodo
@@ -300,6 +306,8 @@ hi def link poshAttributeClose                                 PreProc
 hi def link poshType                                           Type
 hi def link poshDotGenericBracketOpen                          Normal
 hi def link poshDotGenericBracketClose                         Normal
+
+hi def link poshOperator                                       Operator
 
 let b:current_syntax = "posh"
 let &cpo = s:cpo_sav | unlet s:cpo_sav
