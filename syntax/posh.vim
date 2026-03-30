@@ -178,7 +178,7 @@ syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip=
 syntax match poshBracesDelim            "[{}]"                                                                    containedin=ALLBUT,@poshNotTop,poshVariable display
 syntax match poshParenthesesDelim       "[()]"                                                                    containedin=ALLBUT,@poshNottop,poshVariable display
 syntax match poshBracketsDelim          "\%(\%(\.[A-Za-z_][A-Za-z-0-9_]*\)\@<!\[\|\[\%([A-Za-z_]\)\@!\)"          containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
-syntax match poshBarkcetsDelim          "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<!\]"             containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
+syntax match poshBracketsDelim          "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<!\]"             containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
 syntax match poshDotGenericBracketOpen  "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<=\[\ze[A-Za-z_]" containedin=ALLBUT,@poshNotTop,poshVariable display
 syntax match poshDotGenericBracketClose "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<=\]"             containedin=ALLBUT,@poshNotTop,poshVariable display
 
