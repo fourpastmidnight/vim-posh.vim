@@ -85,7 +85,7 @@ syntax cluster poshComments contains=poshComment,poshBlockComment
 " Strings {{{1
 syntax match poshStringDEscapeOther '`.' contained
 syntax match poshStringDEscape      '`[0abefnrtv"`“”\$]' contained
-syntax match poshStringDEscape      '`u{0-9A-Fa-f]\{1,6\}}' contained
+syntax match poshStringDEscape      '`u\x\{1,6\}}' contained
 syntax cluster poshEscapeSequences  contains=poshStringDEscape,poshStringDEscapeOther
 
 syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=@poshStringSpecial,@Spell,poshStringDEscape
@@ -105,7 +105,7 @@ let s:posh_autovars = '\%(\$\|?\|\^\|_\|args\|ConsoleFileName\|E\%(nabledExperim
 let s:posh_preferencevars = '\%(\%(Confirm\|Debug\|ErrorAction\|Information\|Progress\|PSModuleAutoLoading\|PSNativeCommandUseErrorAction\|Verbose\|Warning\|WhatIf\)Preference\|ErrorView\|FormatEnumerationLimit\|\%(Log\%(Command\|Engine\|Provider\)\%(Health\|Lifecycle\)Event\)\|MaximumHistoryCount\|O\%(FS\|utputEncoding\)\|P\%(S\%(DefaultParametervalues\|EmailServer\|NativeCommandArgumentPassing\|Session\%(\%(Application\|Configuration\)Name\|Option\)\|Style\)\)\|Transcript\)'
 
 execute 'syntax match poshVariable      "\%(`\)\@<!\$\%(\i\+:\)\?\%(\%(' . s:posh_autovars . '\|' . s:posh_preferencevars . '\)\%(\i\)\@!\)\@!\i\+"  containedin=ALLBUT,@poshComments,@poshSStrings contains=@poshAutoVars display'
-execute 'syntax match poshVariable      "\%(`\)\@<!\${\%(\%(' . s:posh_autovars . '\|' s:posh_preferencevars . '\)\}\)\@!\%(`[{}]\|[^}\r\n]\)\+}"  containedin=ALLBUT,@poshComments,@poshSStrings contains=@poshAutoVars display'
+execute 'syntax match poshVariable      "\%(`\)\@<!\${\%(\%(' . s:posh_autovars . '\|' . s:posh_preferencevars . '\)\}\)\@!\%(`[{}]\|[^}\r\n]\)\+}"  containedin=ALLBUT,@poshComments,@poshSStrings contains=@poshAutoVars display'
 syntax match poshVariableScope "\%(`\)\@<!\%(\$\)\@<=\%(\i+:\)\ze\i"                                    containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshVariableScope "\%(`\)\@<!\%(\${\)\@<=\%(\i+:\)\ze\%(`[{}]\|[^}]\)"                     containedin=ALLBUT,@poshComments,@poshSStrings display
 
@@ -132,7 +132,7 @@ syntax match poshAutoVarIsCoreCLR                               "\%(`\)\@<!\$\%(
 syntax match poshAutoVarLASTEXITCODE                            "\%(`\)\@<!\$\%(LASTEXITCODE\%(\i\)\@!\|{LASTEXITCODE}\)"                                                       containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshAutoVarMatches                                 "\%(`\)\@<!\$\%(Matches\%(\i\)\@!\|{Matches}\)"                                                                 containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshAutoVarMyInvocation                            "\%(`\)\@<!\$\%(MyInvocation\%(\i\)\@!\|{MyInvocation}\)"                                                       containedin=ALLBUT,@poshComments,@poshSStrings display
-syntax match poshAutoVarNestedPromptLevel                       "\%(`\)\@<!\$\%(NeestedPromptLevel\%(\i\)\@!\|{NestedPromptLevel}\)"                                            containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshAutoVarNestedPromptLevel                       "\%(`\)\@<!\$\%(NestedPromptLevel\%(\i\)\@!\|{NestedPromptLevel}\)"                                             containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshAutoVarNull                                    "\%(`\)\@<!\$\%(null\%(\i\)\@!\|{null}\)"                                                                       containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshAutoVarPID                                     "\%(`\)\@<!\$\%(PID\%(\i\)\@!\|{PID}\)"                                                                         containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshAutoVarPROFILE                                 "\%(`\)\@<!\$\%(PROFILE\%(\i\)\@!\|{PROFILE}\)"                                                                 containedin=ALLBUT,@poshComments,@poshSStrings display
@@ -171,12 +171,12 @@ syntax match poshPrefVarOFS                                     "\%(`\)\@<!\$\%(
 syntax match poshPrefVarOutputEncoding                          "\%(`\)\@<!\$\%(OutputEncoding\%(\i\)\@!\|{OutputEncoding}\)"                                                   containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshPrefVarProgressPreference                      "\%(`\)\@<!\$\%(ProgressPreference\%(\i\)\@!\|{ProgressPreference}\)"                                           containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshPrefVarPSDefaultParameterValues                "\%(`\)\@<!\$\%(PSDefaultParameterValues\%(\i\)\@!\|{PSDefaultParameterValues}\)"                               containedin=ALLBUT,@poshComments,@poshSStrings display
-syntax match poshPrefVarPSEmailServer                           "\%(`\)\@<!\$\%(PSEmailServer\%(\i\)\@!\|{ESMailServer}\)"                                                      containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshPrefVarPSEmailServer                           "\%(`\)\@<!\$\%(PSEmailServer\%(\i\)\@!\|{PSEMailServer}\)"                                                     containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshPrefVarPSModuleAutoLoadingPreference           "\%(`\)\@<!\$\%(PSModuleAutoLoadingPreference\%(\i\)\@!\|{PSModuleAutoLoadingPreference}\)"                     containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshPrefVarPSNativeCommandArgumentPassing          "\%(`\)\@<!\$\%(PSNativeCommandArgumentPassing\%(\i\)\@!\|{PSNativeCommandArgumentPassing}\)"                   containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshPrefVarPSNativeCommandUseErrorActionPreference "\%(`\)\@<!\$\%(PSNativeCommandUseErrorActionPreference\%(\i\)\@!\|{PSNativeCommandUseErrorActionPreference}\)" containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshPrefVarPSSessionApplicationName                "\%(`\)\@<!\$\%(PSSessionApplicationName\%(\i\)\@!\|{PSSessionApplicationName}\)"                               containedin=ALLBUT,@poshComments,@poshSStrings display
-syntax match poshPrefVarPSSessionConfigurationName              "\%(`\)\@<!\$\%(PSSesssionConfigurationName\%(\i\)\@!\|{PSSesssionConfigurationiName}\)"                        containedin=ALLBUT,@poshComments,@poshSStrings display
+syntax match poshPrefVarPSSessionConfigurationName              "\%(`\)\@<!\$\%(PSSessionConfigurationName\%(\i\)\@!\|{PSSessionConfigurationiName}\)"                          containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshPrefVarPSSessionOption                         "\%(`\)\@<!\$\%(PSSessionOption\%(\i\)\@!\|{PSSessionOption}\)"                                                 containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshPrefVarPSStyle                                 "\%(`\)\@<!\$\%(PSStyle\%(\i\)\@!\|{PSStyle}\)"                                                                 containedin=ALLBUT,@poshComments,@poshSStrings display
 syntax match poshPrefVarTranscript                              "\%(`\)\@<!\$\%(Transcript\%(\i\)\@!\|{Transcript}\)"                                                           containedin=ALLBUT,@poshComments,@poshSStrings display
@@ -192,7 +192,7 @@ syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip=
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,@poshStrings,poshBlockComment
 
 syntax match poshBracesDelim            "[{}]"                                                                    containedin=ALLBUT,@poshNotTop,poshVariable display
-syntax match poshParenthesesDelim       "[()]"                                                                    containedin=ALLBUT,@poshNottop,poshVariable display
+syntax match poshParenthesesDelim       "[()]"                                                                    containedin=ALLBUT,@poshNotTop,poshVariable display
 syntax match poshBracketsDelim          "\%(\%(\.[A-Za-z_][A-Za-z-0-9_]*\)\@<!\[\|\[\%([A-Za-z_]\)\@!\)"          containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
 syntax match poshBracketsDelim          "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<!\]"             containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
 syntax match poshDotGenericBracketOpen  "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<=\[\ze[A-Za-z_]" containedin=ALLBUT,@poshNotTop,poshVariable display
