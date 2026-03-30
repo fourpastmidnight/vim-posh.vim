@@ -59,11 +59,21 @@ syntax keyword poshKeywords
   \ for foreach from function hidden if in param process return static switch throw trap try until using
   \ var while inlinescript parallel sequence workflow
 
-syntax match poshArithmeticOperator "[-+\*/%]"
-syntax match poshBitwiseOperator    "-\%(b\%(and\|x\?or\|not\)\|sh[lr]\)"
-syntax match poshAssignmentOperator "[-+\*/%]\?="
+syntax match poshArithmeticOperator            "[-+\*/%]"
+syntax match poshBitwiseOperator               "-\%(b\%(and\|x\?or\|not\)\|sh[lr]\)"
+syntax match poshAssignmentOperator            "\%([-+\*/%]\|??\)\?="
+syntax match poshComparisonOperator            "-[ci]\?\%(eq\|ne\|g[te]\|l[te]\)"
+syntax match poshContainmentComparisonOperator "-\%(not\)\?\%(contains\|in\|like\)"
+syntax match poshTypeOperator                  "-\%(as\|is\%(not\)\?\)"
+syntax match poshLogicalOperator               "-\%(and\|x\?or\|not\)\|!"
+syntax match poshRedirectionOperator           "[1-6\*]>>\?\%(&1\)\?"
+syntax match poshSplitJoinOperator             "-\%([ci]split\|join\)"
+syntax match poshFormatOperator                "-f"
+syntax match poshUnaryOperator                 "++\|--"
+syntax match poshMiscOperator                  ",\|&\|\.\.\?\|::\|??\|?\ze\%([.\[]\)\@="
+syntax match poshPipelineOperator              "||\?\|&&"
 
-syntax cluster poshOperators contains=poshArithmeticOperator,poshBitwiseOperator,poshAssignmentOperator
+syntax cluster poshOperators contains=poshArithmeticOperator,poshBitwiseOperator,poshAssignmentOperator,poshComparisonOperator,poshContainmentComparisonOperator,poshTypeOperator,poshLogicalOperator,poshRedirectionOperator,poshSplitJoinOperator,poshFormatOperator,poshUnaryOperator,poshMiscOperator,poshPipelineOperator
 
 " Comments {{{1
 syntax keyword poshCommentTodo FIXME HACK NOTE TBD TODO UNDONE XXX contained
@@ -294,12 +304,12 @@ hi def link poshPrefVarWhatIfPreference                        Special
 
 hi def link poshNumber                                         Number
 
-hi def link poshBracesDelim                                    Delimiter
-hi def link poshBracketsDelim                                  Delimiter
-hi def link poshParenthesesDelim                               Delimiter
-hi def link poshSubExpr                                        Delimiter
-hi def link poshInterpolationDelimiter                         Delimiter
-hi def link poshAtSigil                                        Delimiter
+hi def link poshBracesDelim                                    Operator
+hi def link poshBracketsDelim                                  Operator
+hi def link poshParenthesesDelim                               Operator
+hi def link poshSubExpr                                        Operator
+hi def link poshInterpolationDelimiter                         Operator
+hi def link poshAtSigil                                        Operator
 
 hi def link poshAttributeHead                                  PreProc
 hi def link poshAttributeClose                                 PreProc
@@ -307,7 +317,19 @@ hi def link poshType                                           Type
 hi def link poshDotGenericBracketOpen                          Normal
 hi def link poshDotGenericBracketClose                         Normal
 
-hi def link poshOperator                                       Operator
+hi def link poshArithmeticOperator                             Operator
+hi def link poshBitwiseOperator                                Operator
+hi def link poshAssignmentOperator                             Operator
+hi def link poshComparisonOperator                             Operator
+hi def link poshContainmentComparisonOperator                  Operator
+hi def link poshTypeOperator                                   Operator
+hi def link poshLogicalOperator                                Operator
+hi def link poshRedirectionOperator                            Operator
+hi def link poshSplitJoinOperator                              Operator
+hi def link poshFormatOperator                                 Operator
+hi def link poshUnaryOperator                                  Operator
+hi def link poshMiscOperator                                   Operator
+hi def link poshPipelineOperator                               Operator
 
 let b:current_syntax = "posh"
 let &cpo = s:cpo_sav | unlet s:cpo_sav
