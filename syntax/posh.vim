@@ -54,6 +54,11 @@ syntax sync linebreaks=1
 syntax cluster poshNotTop contains=@poshStringNotTop,@poshStrings,@poshComments,poshDQuotedMember,poshSQuotedMember,@Spell
 syntax cluster poshNotTopInterpolation contains=@poshComments,poshDQuotedMember,poshSQuotedMember,@Spell
 
+syntax keyword poshKeywords
+  \ begin break catch class continue data define do dynamicparam else elseif end enum exit filter finally
+  \ for foreach from function hidden if in param process return static switch throw trap try until using
+  \ var while inlinescript parallel sequence workflow
+
 " Comments {{{1
 syntax keyword poshCommentTodo FIXME HACK NOTE TBD TODO UNDONE XXX contained
 syntax match   poshComment "#.*" keepend contains=@Spell,poshCommentTodo
@@ -181,7 +186,7 @@ syntax match poshDotGenericBracketClose "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][
 syntax match  poshAttributeHead   /\%([A-Za-z0-9_]\|[]$)}'".]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)\s*\ze(/ containedin=ALLBUT,@poshNotTop nextgroup=poshAttributeArgs skipwhite display
 syntax region poshAttributeArgs   matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALL nextgroup=poshAttributeClose skipwhite display
 syntax match  poshAttributeClose  "]" contained display
-syntax match  poshType            "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,poshSStrings display
+syntax match  poshType            "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,poshSStrings,poshKeywords display
 
 syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" contained contains=ALLBUT,@poshNotTopInterpolation
 syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained
@@ -194,6 +199,8 @@ syntax match poshNumber    "\<\%(0[xX][0-9A-Fa-f]\+\|0[bB][01]\+\|\d\?\.\d\?\%([
 hi def link poshComment                                        Comment
 hi def link poshBlockComment                                   Comment
 hi def link poshCommentTodo                                    Todo
+
+hi def link poshKeywords                                       Keyword
 
 hi def link poshQuotedMember                                   String
 hi def link poshDQuotedMember                                  String
