@@ -51,15 +51,16 @@ syntax case ignore
 syntax sync minlines=800
 syntax sync linebreaks=1
 
-syntax cluster poshNotTop contains=@poshStringNotTop,@poshStrings,@poshComments,poshDQuotedMember,poshSQuotedMember,@Spell
+syntax cluster poshNotTop contains=@poshStringNotTop,@poshStrings,@poshComments,poshDQuotedMember,poshSQuotedMember,poshFunctionDecl,@Spell
 syntax cluster poshNotTopInterpolation contains=@poshComments,poshDQuotedMember,poshSQuotedMember,@Spell
 
+" This group purposefully omits keywords dealing with functions. They are
+" added in a later `syntax keyword` matchel below where we deal with
+" functions.
 syntax keyword poshKeywords
   \ begin break catch class clean continue data define do dynamicparam else elseif end enum exit finally for
   \ foreach from hidden if in param process return static switch throw trap try until using var while
   \ inlinescript parallel sequence
-
-syntax keyword poshFunctionDecl configuration filter function workflow containedin=ALLBUT,@poshNotTop nextgroup=poshFunctionScope,poshFunctionNameConventional,poshFunctionNameUnconventional skipwhite display
 
 syntax match poshArithmeticOperator            "[-+\*/%]"
 syntax match poshBitwiseOperator               "\<-\%(b\%(and\|x\?or\|not\)\|sh[lr]\)\>"
@@ -80,41 +81,37 @@ syntax match poshPipelineOperator              "||\?\|&&"
 syntax cluster poshOperators contains=poshArithmeticOperator,poshBitwiseOperator,poshAssignmentOperator,poshComparisonOperator,poshContainmentComparisonOperator,poshMatchOperator,poshReplaceOperator,poshTypeOperator,poshLogicalOperator,poshRedirectionOperator,poshSplitJoinOperator,poshFormatOperator,poshUnaryOperator,poshMiscOperator,poshPipelineOperator
 
 " Functions {{{1
+
+" Keywords for functions
+syntax keyword poshFunctionDecl configuration filter function workflow containedin=ALLBUT,@poshNotTop nextgroup=poshFunctionScope,poshFunctionName skipwhite display
+
 " Approved verbs (use Get-Verb to see these).
 let s:posh_approved_verbs = '\%('
-    \ . "G\%(et\|rant\|roup\)"
+    \ . "A\%(dd\|pprove\|ssert\)"
+    \ . '\|B\%(ackup\|lock\|uild\)'
+    \ . '\|C\%(heckpoint\|l\%(ear\|ose\)\|\%(o\%(m\%(pare\|plete\|press\)\)\|n\%(firm\|nvert\%(From\|To\)\)?\|py\)\)'
+    \ . '\|D\%(e\%(bug\|ny\|ploy\)\|is\%(able\|connect\|mount\)\)'
+    \ . '\|E\%(dit\|n\%(able\|ter\)\|x\%(it\|p\%(and\|ort\)\)\)'
+    \ . '\|F\%(ind\|ormat\)'
+    \ . '\|G\%(et\|r\%(ant\|oup\)\)'
+    \ . '\|Hide'
+    \ . '\|I\%(mport\|n\%(itialize\|stall\|voke\)\)'
+    \ . '\|Join'
+    \ . '\|L\%(imit\|ock\)'
+    \ . '\|M\%(easure\|erge\|ount\|ove\)'
+    \ . '\|New'
+    \ . '\|O\%(p\%(en\|timize\)\|ut\)'
+    \ . '\|P\%(ing\|op\|rotect\|u\%(blish\|sh\)\)'
+    \ . '\|R\%(e\%(ad\|ceive\|do\|gister\|move\|name\|pair\|quest\|s\%(et\|ize\|olve\|t\%(art\|ore\)\|ume\)\|voke\)\)'
+    \ . '\|S\%(ave\|e\%(arch\|lect\|nd\|t\)\|how\|kip\|plit\|t\%(art\|ep\|op\)\|u\%(bmit\|spend\)\|witch\|ync\)'
+    \ . '\|T\%(est\|race\)'
+    \ . '\|U\%(n\%(do\|b\?lock\|install\|p\%(rotect\|ublish\)\|register\)\|pdate\|se\)'
+    \ . '\|W\%(a\%(it\|tch\)\)'
     \ . '\)'
 
-    "\ . "A\%(dd\|pprove\|ssert\)"
-    "\ . "\|B\%(ackup\|lock\|uild\)"
-    "\ . "\|C\%(heckpoint\|l\%(ear\|ose\)\|\%(o\%(m\%(pare\|plete\|press\)\)\|n\%(firm\|nvert\%(From\|To\)\)?\|py\)\)"
-    "\ . "\|D\%(e\%(bug\|ny\|ploy\)\|is\%(able\|connect\|mount\)\)"
-    "\ . "\|E\%(dit\|n\%(able\|ter\)\|x\%(it\|p\%(and\|ort\)\)\)"
-    "\ . "\|F\%(ind\|ormat\)"
-    "\ . "\|Hide"
-    "\ . "\|I\%(mport\|n\%(itialize\|stall\|voke\)\)"
-    "\ . "\|Join"
-    "\ . "\|L\%(imit\|ock\)"
-    "\ . "\|M\%(easure\|erge\|ount\|ove\)"
-    "\ . "\|New"
-    "\ . "\|O\%(p\%(en\|timize\)\|ut\)"
-    "\ . "\|P\%(ing\|op\|rotect\|u\%(blish\|sh\)\)"
-    "\ . "\|R\%(e\%(ad\|ceive\|do\|gister\|move\|name\|pair\|quest\|s\%(et\|ize\|olve\|t\%(art\|ore\)\|ume\)\|voke\)\)"
-    "\ . "\|S\%(ave\|e\%(arch\|lect\|nd\|t\)\|how\|kip\|plit\|t\%(art\|ep\|op\)\|u\%(bmit\|spend\)\|witch\|ync\)"
-    "\ . "\|T\%(est\|race\)"
-    "\ . "\|U\%(n\%(do\|b\?lock\|install\|p\%(rotect\|ublish\)\|register\)\|pdate\|se\)"
-    "\ . "\|W\%(a\%(it\|tch\)\)"
-
-syntax match poshFunctionScope "\<\%(global\|local\|script\|private\):" contained nextgroup=poshFunctionNameConventional,poshFunctionNameUnconventional display
-
-"execute 'syntax match poshFunctionNameConventional "\%(\<\%(function\|filter\|workflow\|configuration\)\>\s\+\)\@<=\%(\%(global\|local\|script\|private\):\)\?' . s:posh_approved_verbs . '-[A-Za-z0-9]\+" contained contains=poshFunctionScope display'
-"execute 'syntax match poshFunctionNameConventional "\<\%(function\|filter\|workflow\|configuration\)\>\s\+\zs\%(\%(global\|local\|script\|private\):\)\?' . s:posh_approved_verbs . '-[A-Za-z0-9]\+\ze\%(\s\|{\|$\)" containedin=ALLBUT,@poshNotTop display'
-"syntax match poshFunctionNameUnconventional "\%(\<\%(function\|filter\|workflow\|configuration\)\>\s\+\)\@<=\%(\%(global\|local\|script\|private\):\)\?\%([A-Za-z0-9_]+\%(-[A-Za-z0-9_]+\)\?\)" contained contains=poshFunctionScope display
-"syntax match poshFunctionNameUnconventional '\<\%(function\|filter\|workflow\|configuration\)\>\s\+\zs\%(\%(global\|local\|script\|private\):\)\?\%([A-Za-z0-9_]\%(-\|[A-Za-z0-9_]\)*\)\ze\%(\s\|{\|$\)' containedin=ALLBUT,@poshNotTop display
-"syntax match poshFunctionNameUnconventional "\<\%(function\|filter\|workflow\|configuration\)\>\s\+\zs\w[-\w]*\ze\%(\s*\%((\.*)\s*\)\?{\?\|$\)" display
-"syntax match poshFunctionNameUnconventional "\<\%(configuration\|f\%(ilter\|unction\)\|workflow\)\s\+\%(\%(global\|local\|script\|private\):\)\?\zs\%([A-Za-z_]\w*\%(-\w\+\)\?\)\ze\%(\s\|(\|{\|$\)" display
-execute 'syntax match poshFunctionNameUnconventional "\%(' . s:posh_approved_verbs . '-\w\+\)\@!\%([A-Za-z_]\w*\%(-\w\+\)\?\)" contained display'
-execute 'syntax match poshFunctionNameConventional   "' . s:posh_approved_verbs . '-\w\+" contained display'
+syntax match poshFunctionScope "\<\%(global\|local\|script\|private\):" contained nextgroup=poshFunctionName display
+syntax match poshFunctionName  "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\w\+\)\?\)" contained contains=poshFunctionNameConventional display
+execute 'syntax match poshFunctionNameConventional   "\%(\<\|:\)\zs' . s:posh_approved_verbs . '-\w\+" contained containedin=poshFunctionName display'
 
 " Comments {{{1
 syntax keyword poshCommentTodo FIXME HACK NOTE TBD TODO UNDONE XXX contained
@@ -262,7 +259,7 @@ hi def link poshFunctionDecl                                   Keyword
 
 hi def link poshFunctionScope                                  StorageClass
 hi def link poshFunctionNameConventional                       Function
-hi def link poshFunctionNameUnconventional                     Identifier
+hi def link poshFunctionName                                   Identifier
 
 hi def link poshQuotedMember                                   String
 hi def link poshDQuotedMember                                  String
