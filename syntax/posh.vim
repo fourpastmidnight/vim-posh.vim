@@ -64,7 +64,7 @@ syntax keyword poshKeywords
 
 syntax match poshArithmeticOperator            "[-+\*/%]"
 syntax match poshBitwiseOperator               "\<-\%(b\%(and\|x\?or\|not\)\|sh[lr]\)\>"
-syntax match poshAssignmentOperator            "\%([-+\*/%]\|??\)\?="
+syntax match poshAssignmentOperator            "\%([-+\*/%]\|??\)\?=" nextgroup=poshCallOperator,poshCommandScope,poshCommandName skipwhite display
 syntax match poshComparisonOperator            "\<-[ci]\?\%(eq\|ne\|g[te]\|l[te]\)\>"
 syntax match poshContainmentComparisonOperator "\<-\%(not\)\?\%(contains\|in\|like\)\>"
 syntax match poshMatchOperator                 "\<-[ci]\%(not\)\?match\>"
@@ -75,8 +75,11 @@ syntax match poshRedirectionOperator           "[1-6\*]>>\?\%(&1\)\?"
 syntax match poshSplitJoinOperator             "\<-\%([ci]split\|join\)\>"
 syntax match poshFormatOperator                "\<-f\>"
 syntax match poshUnaryOperator                 "++\|--"
-syntax match poshMiscOperator                  ";\|,\|&\|\.\.\?\|::\|??\|?\ze\%([.\[]\)\@="
-syntax match poshPipelineOperator              "||\?\|&&"
+syntax match poshMiscOperator                  "\.\.\|::\|??\|?\ze\%([.\[]\)\@="
+syntax match poshStatementTerminator           ";" nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl display
+syntax match poshCommaOperator                 "," nextgroup=poshCallOperator,poshCommandScope,poshCommandName skipwhite display
+syntax match poshPipelineOperator              "||\?\|&&" nextgroup=poshCallOperator,poshCommandScope,poshCommandName skipwhite skipnl display
+syntax match poshCallOperator                  "\%(&\|\.\ze\s\)" nextgroup=poshCommandScope,poshCommandName skipwhite skipnl display
 
 syntax cluster poshOperators contains=poshArithmeticOperator,poshBitwiseOperator,poshAssignmentOperator,poshComparisonOperator,poshContainmentComparisonOperator,poshMatchOperator,poshReplaceOperator,poshTypeOperator,poshLogicalOperator,poshRedirectionOperator,poshSplitJoinOperator,poshFormatOperator,poshUnaryOperator,poshMiscOperator,poshPipelineOperator
 
@@ -112,6 +115,12 @@ let s:posh_approved_verbs = '\%('
 syntax match poshFunctionScope "\<\%(global\|local\|script\|private\):" contained nextgroup=poshFunctionName display
 syntax match poshFunctionName  "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\w\+\)\?\)" contained contains=poshFunctionNameConventional display
 execute 'syntax match poshFunctionNameConventional   "\%(\<\|:\)\zs' . s:posh_approved_verbs . '-\w\+" contained containedin=poshFunctionName display'
+
+" Function Invocation {{{1
+syntax match poshCommandScope    "\<\%(global\|local\|script\|private\):" contained nextgroup=poshCommandName,poshCommandNameDash display
+syntax match poshCommandName     "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\w\+\)\?\)" contained contains=poshCommandNameConventional
+syntax match poshCommandNameDash "\%(\%(global\|local\|script\|private\):\)\@![A-Za-z_]\w*-\%(\w\|-\)\+" contains=poshCommandNameConventional display
+execute 'syntax match poshCommandNameConventional "\<\%(' . s:posh_approved_verbs . '\|' . s:posh_reserved_verbs . '\)-\w\+" contained containedin=poshCommandName display'
 
 " Comments {{{1
 syntax keyword poshCommentTodo FIXME HACK NOTE TBD TODO UNDONE XXX contained
@@ -230,7 +239,8 @@ syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip=
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,@poshStrings,poshBlockComment
 
 syntax match poshBracesDelim            "[{}]"                                                                    containedin=ALLBUT,@poshNotTop,poshVariable display
-syntax match poshParenthesesDelim       "[()]"                                                                    containedin=ALLBUT,@poshNotTop,poshVariable display
+syntax match poshParenthesesDelim       "("                                                                       containedin=ALLBUT,@poshNotTop,poshVariable nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
+syntax match poshParenthesesDelim       ")"                                                                       containedin=ALLBUT,@poshNotTop,poshVariable display
 syntax match poshBracketsDelim          "\%(\%(\.[A-Za-z_][A-Za-z-0-9_]*\)\@<!\[\|\[\%([A-Za-z_]\)\@!\)"          containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
 syntax match poshBracketsDelim          "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<!\]"             containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
 syntax match poshDotGenericBracketOpen  "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<=\[\ze[A-Za-z_]" containedin=ALLBUT,@poshNotTop,poshVariable display
@@ -246,7 +256,7 @@ syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%
 syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained
 syntax cluster poshStringSpecial contains=@poshEscapeSequences,poshInterpolation,poshVariable,@poshAutoVars,@poshPrefVars,@Spell
 
-syntax match poshAtSigil   "@[{(]" display
+syntax match poshAtSigil   "@[{(]" nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
 
 syntax match poshNumber    "\<\%(0[xX][0-9A-Fa-f]\+\|0[bB][01]\+\|\d\?\.\d\?\%([eE][+-]\?\d\+\)\=\|\d\+[eE][+-]\?\d\+\|\d\+\)\%(uy\|y\|us\|s\|ul\|l\|u\|n\|d\)\?\%([kKmMgGtTpP][bB]\)\?\>" containedin=ALLBUT,@poshComments,@poshStrings
 
@@ -257,8 +267,11 @@ hi def link poshCommentTodo                                    Todo
 hi def link poshKeywords                                       Keyword
 hi def link poshFunctionDecl                                   Keyword
 
+hi def link poshCommandScope                                   StorageClass
 hi def link poshFunctionScope                                  StorageClass
+hi def link poshCommandNameConventional                        Function
 hi def link poshFunctionNameConventional                       Function
+hi def link poshCommandName                                    Identifier
 hi def link poshFunctionName                                   Identifier
 
 hi def link poshQuotedMember                                   String
@@ -374,7 +387,10 @@ hi def link poshSplitJoinOperator                              Operator
 hi def link poshFormatOperator                                 Operator
 hi def link poshUnaryOperator                                  Operator
 hi def link poshMiscOperator                                   Operator
+hi def link poshStatementTerminator                            Operator
+hi def link poshCommaOperator                                  Operator
 hi def link poshPipelineOperator                               Operator
+hi def link poshCallOperator                                   Operator
 
 let b:current_syntax = "posh"
 let &cpo = s:cpo_sav | unlet s:cpo_sav
