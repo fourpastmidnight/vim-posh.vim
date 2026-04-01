@@ -75,7 +75,7 @@ syntax match poshRedirectionOperator           "[1-6\*]>>\?\%(&1\)\?"
 syntax match poshSplitJoinOperator             "\<-\%([ci]split\|join\)\>"
 syntax match poshFormatOperator                "\<-f\>"
 syntax match poshUnaryOperator                 "++\|--"
-syntax match poshMiscOperator                  ",\|&\|\.\.\?\|::\|??\|?\ze\%([.\[]\)\@="
+syntax match poshMiscOperator                  ";\|,\|&\|\.\.\?\|::\|??\|?\ze\%([.\[]\)\@="
 syntax match poshPipelineOperator              "||\?\|&&"
 
 syntax cluster poshOperators contains=poshArithmeticOperator,poshBitwiseOperator,poshAssignmentOperator,poshComparisonOperator,poshContainmentComparisonOperator,poshMatchOperator,poshReplaceOperator,poshTypeOperator,poshLogicalOperator,poshRedirectionOperator,poshSplitJoinOperator,poshFormatOperator,poshUnaryOperator,poshMiscOperator,poshPipelineOperator
