@@ -120,9 +120,9 @@ execute 'syntax match poshFunctionDeclNameConventional   "\%(\<\|:\)\zs' . s:pos
 
 " Function Invocation {{{1
 syntax match poshCommandScope    "\<\%(global\|local\|script\|private\):" contained nextgroup=poshCommandName,poshCommandNameDash display
-syntax match poshCommandName     "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\w\+\)\?\)" contained contains=poshCommandNameConventional
-syntax match poshCommandNameDash "\%(\%(global\|local\|script\|private\):\)\@![A-Za-z_]\w*-\%(\w\|-\)\+" contains=poshCommandNameConventional display
-execute 'syntax match poshCommandNameConventional "\<\%(' . s:posh_approved_verbs . '\|' . s:posh_reserved_verbs . '\)-\w\+" contained containedin=poshCommandName display'
+syntax match poshCommandName     "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\i*\%(-\i\+\)\?\)" contained contains=poshCommandNameConventional
+syntax match poshCommandNameDash "\%(\%(global\|local\|script\|private\):\)\@![A-Za-z_]\i*-\%(\i\|-\)\+" contains=poshCommandNameConventional display
+execute 'syntax match poshCommandNameConventional "\<\%(' . s:posh_approved_verbs . '\|' . s:posh_reserved_verbs . '\)-\i\+" contained containedin=poshCommandName,poshCommandNameDash display'
 
 " Comments {{{1
 syntax keyword poshCommentTodo FIXME HACK NOTE TBD TODO UNDONE XXX contained
