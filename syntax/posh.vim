@@ -86,7 +86,7 @@ syntax cluster poshOperators contains=poshArithmeticOperator,poshBitwiseOperator
 " Functions {{{1
 
 " Keywords for functions
-syntax keyword poshFunctionDecl configuration filter function workflow containedin=ALLBUT,@poshNotTop nextgroup=poshFunctionScope,poshFunctionName skipwhite display
+syntax keyword poshFunctionDecl configuration filter function workflow containedin=ALLBUT,@poshNotTop nextgroup=poshFunctionDeclScope,poshFunctionDeclName skipwhite display
 
 " Approved verbs (use Get-Verb to see these).
 let s:posh_approved_verbs = '\%('
@@ -109,12 +109,14 @@ let s:posh_approved_verbs = '\%('
     \ . '\|S\%(ave\|e\%(arch\|lect\|nd\|t\)\|how\|kip\|plit\|t\%(art\|ep\|op\)\|u\%(bmit\|spend\)\|witch\|ync\)'
     \ . '\|T\%(est\|race\)'
     \ . '\|U\%(n\%(do\|b\?lock\|install\|p\%(rotect\|ublish\)\|register\)\|pdate\|se\)'
-    \ . '\|W\%(a\%(it\|tch\)\)'
+    \ . '\|W\%(a\%(it\|tch\)\rite\)'
     \ . '\)'
 
-syntax match poshFunctionScope "\<\%(global\|local\|script\|private\):" contained nextgroup=poshFunctionName display
-syntax match poshFunctionName  "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\w\+\)\?\)" contained contains=poshFunctionNameConventional display
-execute 'syntax match poshFunctionNameConventional   "\%(\<\|:\)\zs' . s:posh_approved_verbs . '-\w\+" contained containedin=poshFunctionName display'
+let s:posh_reserved_verbs = '\%(ForEach\|Sort\|Tee\|Where\)'
+
+syntax match poshFunctionDeclScope "\<\%(global\|local\|script\|private\):" contained nextgroup=poshFunctionDeclName display
+syntax match poshFunctionDeclName  "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\w\+\)\?\)" contained contains=poshFunctionDeclNameConventional display
+execute 'syntax match poshFunctionDeclNameConventional   "\%(\<\|:\)\zs' . s:posh_approved_verbs . '-\w\+" contained containedin=poshFunctionDeclName display'
 
 " Function Invocation {{{1
 syntax match poshCommandScope    "\<\%(global\|local\|script\|private\):" contained nextgroup=poshCommandName,poshCommandNameDash display
@@ -268,11 +270,11 @@ hi def link poshKeywords                                       Keyword
 hi def link poshFunctionDecl                                   Keyword
 
 hi def link poshCommandScope                                   StorageClass
-hi def link poshFunctionScope                                  StorageClass
+hi def link poshFunctionDeclScope                              StorageClass
 hi def link poshCommandNameConventional                        Function
-hi def link poshFunctionNameConventional                       Function
+hi def link poshFunctionDeclNameConventional                   Function
 hi def link poshCommandName                                    Identifier
-hi def link poshFunctionName                                   Identifier
+hi def link poshFunctionDeclName                               Identifier
 
 hi def link poshQuotedMember                                   String
 hi def link poshDQuotedMember                                  String
