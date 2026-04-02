@@ -120,8 +120,8 @@ execute 'syntax match poshFunctionDeclNameConventional   "\%(\<\|:\)\zs' . s:pos
 
 " Function Invocation {{{1
 syntax match poshCommandScope    "\<\%(global\|local\|script\|private\):" contained nextgroup=poshCommandName,poshCommandNameDash display
-syntax match poshCommandName     "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\i*\%(-\i\+\)\?\)" contained contains=poshCommandNameConventional
-syntax match poshCommandNameDash "\%(\%(global\|local\|script\|private\):\)\@![A-Za-z_]\i*-\%(\i\|-\)\+" contains=poshCommandNameConventional display
+syntax match poshCommandName     "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\i\+\)\?\)" contained contains=poshCommandNameConventional
+syntax match poshCommandNameDash "\%(\%(global\|local\|script\|private\):\)\@![A-Za-z_]\w*-\i\+" contains=poshCommandNameConventional display
 execute 'syntax match poshCommandNameConventional "\<\%(' . s:posh_approved_verbs . '\|' . s:posh_reserved_verbs . '\)-\i\+" contained containedin=poshCommandName,poshCommandNameDash display'
 
 " Comments {{{1
@@ -258,7 +258,8 @@ syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%
 syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained
 syntax cluster poshStringSpecial contains=@poshEscapeSequences,poshInterpolation,poshVariable,@poshAutoVars,@poshPrefVars,@Spell
 
-syntax match poshAtSigil   "@[{(]" nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
+syntax match poshAtSigil   "@{" containedin=ALLBUT,@poshNotTop,poshVariable display
+syntax match poshAtSigil   "@("    containedin=ALLBUT,@poshNotTop,poshVariable nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipempty skipnl display
 
 syntax match poshNumber    "\<\%(0[xX][0-9A-Fa-f]\+\|0[bB][01]\+\|\d\?\.\d\?\%([eE][+-]\?\d\+\)\=\|\d\+[eE][+-]\?\d\+\|\d\+\)\%(uy\|y\|us\|s\|ul\|l\|u\|n\|d\)\?\%([kKmMgGtTpP][bB]\)\?\>" containedin=ALLBUT,@poshComments,@poshStrings
 
