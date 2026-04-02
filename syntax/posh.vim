@@ -119,9 +119,9 @@ syntax match poshFunctionDeclName  "\%(\%(global\|local\|script\|private\):\)\@!
 execute 'syntax match poshFunctionDeclNameConventional   "\%(\<\|:\)\zs' . s:posh_approved_verbs . '-\i\+" contained containedin=poshFunctionDeclName display'
 
 " Function Invocation {{{1
-syntax match poshCommandScope    "\<\%(global\|local\|script\|private\):" contained nextgroup=poshCommandName,poshCommandNameDash display
-syntax match poshCommandName     "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\i\+\)\?\)" contained contains=poshCommandNameConventional
-syntax match poshCommandNameDash "\%(\%(global\|local\|script\|private\):\)\@![A-Za-z_]\w*-\i\+" contains=poshCommandNameConventional display
+syntax match poshCommandScope        "\<\%(global\|local\|script\|private\):" contained nextgroup=poshCommandName,poshCommandNameDash display
+syntax match poshCommandName         "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\i\+\)\?\)" contained contains=poshCommandNameConventional
+syntax match poshCommandNameDash     "\%(\%(global\|local\|script\|private\):\)\@![A-Za-z_]\w*-\i\+" contained containedin=ALLBUT,@poshNotTop,poshVariable contains=poshCommandNameConventional display
 execute 'syntax match poshCommandNameConventional "\<\%(' . s:posh_approved_verbs . '\|' . s:posh_reserved_verbs . '\)-\i\+" contained containedin=poshCommandName,poshCommandNameDash display'
 
 " Comments {{{1
@@ -250,7 +250,8 @@ syntax match poshDotGenericBracketClose "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][
 
 " Attributes {{{1
 syntax match  poshAttributeHead   /\%([A-Za-z0-9_]\|[]$)}'".]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)\s*\ze(/ containedin=ALLBUT,@poshNotTop nextgroup=poshAttributeArgs skipwhite display
-syntax region poshAttributeArgs   matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALL nextgroup=poshAttributeClose skipwhite display
+syntax match poshAttributeName    "\[\s*\zs[A-Za-z_]\w*\ze" contained
+syntax region poshAttributeArgs   matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALLBUT,poshCommandName,poshCommandNameDash,poshCallOperator nextgroup=poshAttributeClose skipwhite display
 syntax match  poshAttributeClose  "]" contained display
 syntax match  poshType            "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,poshSStrings,poshKeywords display
 
@@ -259,7 +260,7 @@ syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshI
 syntax cluster poshStringSpecial contains=@poshEscapeSequences,poshInterpolation,poshVariable,@poshAutoVars,@poshPrefVars,@Spell
 
 syntax match poshAtSigil   "@{" containedin=ALLBUT,@poshNotTop,poshVariable display
-syntax match poshAtSigil   "@("    containedin=ALLBUT,@poshNotTop,poshVariable nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipempty skipnl display
+syntax match poshAtSigil   "@(" containedin=ALLBUT,@poshNotTop,poshVariable nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipempty skipnl display
 
 syntax match poshNumber    "\<\%(0[xX][0-9A-Fa-f]\+\|0[bB][01]\+\|\d\?\.\d\?\%([eE][+-]\?\d\+\)\=\|\d\+[eE][+-]\?\d\+\|\d\+\)\%(uy\|y\|us\|s\|ul\|l\|u\|n\|d\)\?\%([kKmMgGtTpP][bB]\)\?\>" containedin=ALLBUT,@poshComments,@poshStrings
 
@@ -275,6 +276,7 @@ hi def link poshFunctionDeclScope                              StorageClass
 hi def link poshCommandNameConventional                        Function
 hi def link poshFunctionDeclNameConventional                   Function
 hi def link poshCommandName                                    Identifier
+hi def link poshCommandNameDash                                Identifier
 hi def link poshFunctionDeclName                               Identifier
 
 hi def link poshQuotedMember                                   String
