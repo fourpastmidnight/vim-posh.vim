@@ -92,7 +92,7 @@ syntax keyword poshFunctionDecl configuration filter function workflow contained
 let s:posh_approved_verbs = '\%('
     \ . 'A\%(dd\|pprove\|ssert\)'
     \ . '\|B\%(ackup\|lock\|uild\)'
-    \ . '\|C\%(heckpoint\|l\%(ear\|ose\)\|\%(o\%(m\%(pare\|plete\|press\)\|n\%(firm\|nvert\%(From\|To\)\?\)\|py\)\)\)'
+    \ . '\|C\%(heckpoint\|l\%(ear\|ose\)\|\%(o\%(m\%(pare\|plete\|press\)\|n\%(firm\|vert\%(From\|To\)\?\)\|py\)\)\)'
     \ . '\|D\%(e\%(bug\|ny\|ploy\)\|is\%(able\|connect\|mount\)\)'
     \ . '\|E\%(dit\|n\%(able\|ter\)\|x\%(it\|p\%(and\|ort\)\)\)'
     \ . '\|F\%(ind\|ormat\)'
@@ -115,7 +115,7 @@ let s:posh_approved_verbs = '\%('
 let s:posh_reserved_verbs = '\%(ForEach\|Sort\|Tee\|Where\)'
 
 syntax match poshFunctionDeclScope "\<\%(global\|local\|script\|private\):" contained nextgroup=poshFunctionDeclName display
-syntax match poshFunctionDeclName  "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\i*\%(-\i\+\)\?\)" contained contains=poshFunctionDeclNameConventional display
+syntax match poshFunctionDeclName  "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\i\+\)\?\)" contained contains=poshFunctionDeclNameConventional display
 execute 'syntax match poshFunctionDeclNameConventional   "\%(\<\|:\)\zs' . s:posh_approved_verbs . '-\i\+" contained containedin=poshFunctionDeclName display'
 
 " Function Invocation {{{1
