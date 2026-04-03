@@ -292,7 +292,9 @@ hi def link poshSQuotedMember                                  String
 hi def link poshStringDEscapeOther                             Char
 hi def link poshStringDEscape                                  SpecialChar
 hi def link poshStringD                                        String
+hi def link poshHereStringD                                    String
 hi def link poshStringS                                        String
+hi def link poshHereStringS                                    String
 hi def link poshVariable                                       Identifier
 hi def link poshVariableScope                                  StorageClass
 
