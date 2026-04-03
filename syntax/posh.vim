@@ -250,11 +250,17 @@ syntax match poshDotGenericBracketOpen  "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][
 syntax match poshDotGenericBracketClose "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<=\]"             containedin=ALLBUT,@poshNotTop,poshVariable display
 
 " Attributes {{{1
-syntax match  poshAttributeHead   /\%([A-Za-z0-9_]\|[]$)}'".]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)\s*\ze(/ containedin=ALLBUT,@poshNotTop nextgroup=poshAttributeArgs skipwhite display
-syntax match poshAttributeName    "\[\s*\zs[A-Za-z_]\w*\ze" contained
-syntax region poshAttributeArgs   matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALLBUT,poshCallOperator,poshCommandScope,poshCommandName,poshCommandNameDash nextgroup=poshAttributeClose skipwhite display
-syntax match  poshAttributeClose  "]" contained display
-syntax match  poshType            "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,poshSStrings,poshKeywords display
+syntax match  poshAttributeHead           /\%([A-Za-z0-9_]\|[]$)}'".]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)\s*\ze(/ containedin=ALLBUT,@poshNotTop nextgroup=poshAttributeArgs skipwhite display
+syntax match  poshAttributeArgsOpen       '(' contained nextgroup=poshAttributeArg skipwhite skipnl skipempty display
+syntax match  poshAttributeName           "\[\s*\zs[A-Za-z_]\w*\ze" contained
+syntax match  poshAttributeArgsSeparator  ',' contained containedin=poshAttributeArgs skipwhite skipnl skipempty display
+syntax match  poshAttributeArgsClose      ')' contained nextgroup=poshAttributeClose skipwhite skipnl skipempty display
+syntax match  poshAttributeClose          ']' contained display
+syntax match  poshAttributeArg            '\%([A-Za-z_]\w*\s*=\s*\)\?\zs.\{-}\ze\%(\s*[,)]\)' contained nextgroup=poshAttributeArgsSeparator,poshAttributeArgsClose skipwhite skipnl skipempty display
+"syntax region poshAttributeArgs           matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALLBUT,poshCallOperator,poshCommaOperator,poshCommandScope,poshCommandName,poshCommandNameDash nextgroup=poshAttributeClose skipwhite display
+syntax region poshAttributeArgs           matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALLBUT,poshCallOperator,poshCommandScope,poshCommandName,poshCommandNameDash nextgroup=poshAttributeClose skipwhite skipnl skipempty display
+syntax region poshAtributeNestedParen     matchgroup=Delimiter start="(" end=")" transparent keepend contained containedin=poshAttributeArgs,poshAttributeNestedParen contains=ALLBUT,poshAttributeArgsSeparator display
+syntax match  poshType                    "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,poshSStrings,poshKeywords display
 
 syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" contained contains=ALLBUT,@poshNotTopInterpolation
 syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained
@@ -374,6 +380,7 @@ hi def link poshInterpolationDelimiter                         Operator
 hi def link poshAtSigil                                        Operator
 
 hi def link poshAttributeHead                                  PreProc
+hi def link poshAttributeArgsSeparator                         Normal
 hi def link poshAttributeClose                                 PreProc
 hi def link poshType                                           Type
 hi def link poshDotGenericBracketOpen                          Normal
