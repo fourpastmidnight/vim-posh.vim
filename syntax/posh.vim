@@ -137,10 +137,10 @@ syntax match poshStringDEscape      '`[0abefnrtv"`“”\$]' contained
 syntax match poshStringDEscape      '`u\x\{1,6\}}' contained
 syntax cluster poshEscapeSequences  contains=poshStringDEscape,poshStringDEscapeOther
 
-syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=@poshStringSpecial,@Spell,poshStringDEscape
-syntax region poshStringS     start="'"   skip="''" end="'"   keepend
-syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=@poshStringSpecial,@Spell,poshStringDEscape
-syntax region poshHereStringS start="@'$"           end="^'@" keepend
+syntax region poshStringD     start='"'   skip='`"' end='"'   keepend contains=@poshStringSpecial,@Spell,poshStringDEscape containedin=poshAttributeArgs,poshAttributeArg,poshAttributeNestedParen
+syntax region poshStringS     start="'"   skip="''" end="'"   keepend containedin=poshAttributeArgs,poshAttributeArg,poshAttributeNestedParen
+syntax region poshHereStringD start='@"$'           end='^"@' keepend contains=@poshStringSpecial,@Spell,poshStringDEscape containedin=poshAttributeArgs,poshAttributeArg,poshAttributeNestedParen
+syntax region poshHereStringS start="@'$"           end="^'@" keepend containedin=poshAttributeArgs,poshAttributeArg,poshAttributeNestedParen
 
 syntax cluster poshDStrings      contains=poshStringD,poshHereStringD
 syntax cluster poshSStrings      contains=poshStringS,poshHereStringS
@@ -258,7 +258,7 @@ syntax match  poshAttributeArgsClose      ')' contained nextgroup=poshAttributeC
 syntax match  poshAttributeClose          ']' contained display
 syntax match  poshAttributeArg            '\%([A-Za-z_]\w*\s*=\s*\)\?\zs.\{-}\ze\%(\s*[,)]\)' contained nextgroup=poshAttributeArgsSeparator,poshAttributeArgsClose skipwhite skipnl skipempty display
 "syntax region poshAttributeArgs           matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALLBUT,poshCallOperator,poshCommaOperator,poshCommandScope,poshCommandName,poshCommandNameDash nextgroup=poshAttributeClose skipwhite display
-syntax region poshAttributeArgs           matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALLBUT,poshCallOperator,poshCommandScope,poshCommandName,poshCommandNameDash nextgroup=poshAttributeClose skipwhite skipnl skipempty display
+syntax region poshAttributeArgs           matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALLBUT,poshCallOperator,poshCommandScope,poshCommandName,poshCommandNameDash,poshFunctionDecl,poshFunctionDeclName nextgroup=poshAttributeClose skipwhite skipnl skipempty display
 syntax region poshAtributeNestedParen     matchgroup=Delimiter start="(" end=")" transparent keepend contained containedin=poshAttributeArgs,poshAttributeNestedParen contains=ALLBUT,poshAttributeArgsSeparator display
 syntax match  poshType                    "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,poshSStrings,poshKeywords display
 
