@@ -265,7 +265,7 @@ syntax match  poshAttributeArg            '\%([A-Za-z_]\w*\s*=\s*\)\?\zs.\{-}\ze
 "syntax region poshAttributeArgs           matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALLBUT,poshCallOperator,poshCommaOperator,poshCommandScope,poshCommandName,poshCommandNameDash nextgroup=poshAttributeClose skipwhite display
 syntax region poshAttributeArgs           matchgroup=Delimiter start="(" end=")" transparent keepend contained contains=ALLBUT,poshCallOperator,poshCommandScope,poshCommandName,poshCommandNameDash,poshFunctionDecl,poshFunctionDeclName nextgroup=poshAttributeClose skipwhite skipnl skipempty display
 syntax region poshAtributeNestedParen     matchgroup=Delimiter start="(" end=")" transparent keepend contained containedin=poshAttributeArgs,poshAttributeNestedParen contains=ALLBUT,poshAttributeArgsSeparator display
-syntax match  poshType                    "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,poshSStrings,poshKeywords display
+syntax match  poshType                    "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,@poshStrings,poshKeywords display
 
 syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" contained contains=ALLBUT,@poshNotTopInterpolation
 syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained
