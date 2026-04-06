@@ -125,7 +125,8 @@ syntax match  poshCommandNameDash        "\%(\%(global\|local\|script\|private\)
 execute 'syntax match  poshCommandNameConventional   "\<\%(' . s:posh_approved_verbs . '\|' . s:posh_reserved_verbs . '\)-\i\+" contained containedin=poshCommandName,poshCommandNameDash nextgroup=poshCommandArgs display'
 syntax match  poshCommandParamName       "-[A-Za-z_]\w*" contained containedin=poshCommandArgs,poshCommandArgsNestedParen display
 "syntax region poshCommandArgs            start="\%(\s\+\)\@=" end="\ze\%(\s*[)|;]\|$\)" transparent keepend contained contains=poshCommandParamName,poshCommandArgsNestedParen display
-syntax region poshCommandArgs            start="\%(\s\+\)\@=" end="\ze\%(\s*[|;]\|$\)" transparent keepend contained contains=poshCommandParamName,poshCommandArgsNestedParen display
+"syntax region poshCommandArgs            start="\%(\s\+\)\@=" end="\ze\%(\s*[|;]\|$\)" transparent keepend contained contains=poshCommandParamName,poshCommandArgsNestedParen display
+syntax region poshCommandArgs            start="\%(\s\+\)\@=" end="\ze\%(\s*[|;]\|$\)" transparent keepend contained containedin=poshCommandName,poshCommandNameDash,poshCommandNameConventional contains=poshCommandParamName,poshCommandArgsNestedParen display
 syntax region poshCommandArgsNestedParen matchgroup=Delimiter start='(' end=')' transparent keepend contained containedin=poshCommandArgs,poshCommandArgsNestedParen display
 syntax match  poshInvocationStart        "\%(^\s*\|[;{|(]\s*\)\zs\ze[A-Za-z_]\w*-\i\+" containedin=ALLBUT,@poshNotTop,poshAttributeArgs,poshAttributeNestedParam,poshAttributeArg nextgroup=poshCallOperator,poshCommandScope,poshCommandNameConventional,poshCommandNameDash,poshCommandName skipwhite skipnl skipempty display
 
@@ -246,10 +247,18 @@ syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip=
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,@poshStrings,poshBlockComment
 
 syntax match poshBracesDelim            "[{}]"                                                                    containedin=ALLBUT,@poshNotTop,poshVariable display
-syntax match poshParenthesesDelim       "("                                                                       containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen display
-syntax match poshParenthesesDelim       "(\ze\s*[A-Za-z_]\w*-\i+"                                                 containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
-syntax match poshParenthesesDelim       ")"                                                                       containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen display
-syntax match poshBracketsDelim          "\%(\%(\.[A-Za-z_][A-Za-z-0-9_]*\)\@<!\[\|\[\%([A-Za-z_]\)\@!\)"          containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
+"syntax match poshParenthesesDelim       "("                                                                       containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen display
+"syntax match poshParenthesesDelim       "(\ze\s*[A-Za-z_]\w*-\i+"                                                 containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
+"syntax match poshParenthesesDelim       ")"                                                                       containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen display
+"syntax match poshBracketsDelim          "\%(\%(\.[A-Za-z_][A-Za-z-0-9_]*\)\@<!\[\|\[\%([A-Za-z_]\)\@!\)"          containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
+
+" General Parentheses (nested) {{{1
+" Use a region (not standalone delimiter matches) so nesting works everywhere.
+syntax region poshParentheses           matchgroup=poshParenthesesDelim start="(" end=")" transparent keepend contains=ALLBUT,poshParentheses,poshInterpolation display
+
+" Keep this special-case opener for invoking dash-name commands after '('
+syntax match  poshParenthesesDelim      "(\ze\s*[A-Za-z_]\w*-\i+"                                                 containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
+syntax match  poshBracketsDelim         "\%(\%(\.[A-Za-z_]\w*\)\@<!\[\|\[\%([A-Za-z_]\)\@!\)"                     containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshType,poshAttributeArgs,poshAttributeClose display
 syntax match poshParenthesesInvokeOpen  "(\s*\ze[A-Za-z_]\w*-\i\+" containedin=ALLBUT,poshVariable,poshAttributeArgs,poshAttributeNestedParen,poshAttributeArg nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
 syntax match poshBracketsDelim          "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<!\]"             containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
 syntax match poshDotGenericBracketOpen  "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<=\[\ze[A-Za-z_]" containedin=ALLBUT,@poshNotTop,poshVariable display
@@ -268,9 +277,11 @@ syntax region poshAttributeArgs           matchgroup=Delimiter start="(" end=")"
 syntax region poshAtributeNestedParen     matchgroup=Delimiter start="(" end=")" transparent keepend contained containedin=poshAttributeArgs,poshAttributeNestedParen contains=ALLBUT,poshAttributeArgsSeparator display
 syntax match  poshType                    "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,@poshStrings,poshKeywords display
 
-syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" transparent keepend contained contains=ALLBUT,@poshNotTopInterpolation
-syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained containedin=poshInterpolation,poshNestedParentheses contains=ALLBUT,@poshNotTopInterpolation
-syntax region  poshInterpolationNestedParen matchgroup=poshParenthesesDelim start="(" end=")" transparent keepend contained containedin=poshInterpolation,poshInterpolationNestedParen
+"syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" transparent keepend contained contains=ALLBUT,@poshNotTopInterpolation
+"syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained containedin=poshInterpolation,poshNestedParentheses contains=ALLBUT,@poshNotTopInterpolation
+"syntax region  poshInterpolationNestedParen matchgroup=poshParenthesesDelim start="(" end=")" transparent keepend contained containedin=poshInterpolation,poshInterpolationNestedParen
+syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" transparent keepend contained contains=ALLBUT,poshParentheses,poshAttributeArgs,poshAttributeArg,@poshNotTopInterpolation
+syntax region  poshInterpolationNestedParen matchgroup=poshParenthesesDelim start="(" end=")" transparent keepend contained containedin=poshInterpolation,poshInterpolationNestedParen,poshAttributeArgs,poshAttributeArg contains=ALLBUT,poshInterpolationNestedParen,@poshNotTopIntrepolation
 syntax cluster poshStringSpecial contains=@poshEscapeSequences,poshInterpolation,poshVariable,@poshAutoVars,@poshPrefVars,@Spell
 
 syntax match poshAtSigil   "@{" containedin=ALLBUT,@poshNotTop,poshVariable display
