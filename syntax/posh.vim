@@ -246,10 +246,10 @@ syntax region poshSQuotedMember matchgroup=poshQuotedMember start="\.\s*'" skip=
 syntax region poshDQuotedMember matchgroup=poshQuotedMember start='\.\s*"' skip='`"' end='"' keepend contains=poshStringDEscape containedin=ALLBUT,@poshStrings,poshBlockComment
 
 syntax match poshBracesDelim            "[{}]"                                                                    containedin=ALLBUT,@poshNotTop,poshVariable display
-syntax match poshParenthesesDelim       "("                                                                       containedin=ALLBUT,@poshNotTop,poshVariable display
-syntax match poshParenthesesDelim       "(\ze\s*[A-Za-z_]\w*-\i+"                                                 containedin=ALLBUT,@poshNotTop,poshVariable nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
-syntax match poshParenthesesDelim       ")"                                                                       containedin=ALLBUT,@poshNotTop,poshVariable display
-syntax match poshBracketsDelim          "\%(\%(\.[A-Za-z_][A-Za-z-0-9_]*\)\@<!\[\|\[\%([A-Za-z_]\)\@!\)"          containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
+syntax match poshParenthesesDelim       "("                                                                       containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen display
+syntax match poshParenthesesDelim       "(\ze\s*[A-Za-z_]\w*-\i+"                                                 containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
+syntax match poshParenthesesDelim       ")"                                                                       containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen display
+syntax match poshBracketsDelim          "\%(\%(\.[A-Za-z_][A-Za-z-0-9_]*\)\@<!\[\|\[\%([A-Za-z_]\)\@!\)"          containedin=ALLBUT,@poshNotTop,poshVariable,poshInterpolation,poshInterpolationNestedParen,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
 syntax match poshParenthesesInvokeOpen  "(\s*\ze[A-Za-z_]\w*-\i\+" containedin=ALLBUT,poshVariable,poshAttributeArgs,poshAttributeNestedParen,poshAttributeArg nextgroup=poshCallOperator,poshCommandScope,poshCommandNameDash skipwhite skipnl skipempty display
 syntax match poshBracketsDelim          "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<!\]"             containedin=ALLBUT,@poshNotTop,poshVariable,poshType,poshAttributeHead,poshAttributeArgs,poshAttributeClose display
 syntax match poshDotGenericBracketOpen  "\%(\.[A-Za-z_][A-Za-z0-9_]*\[[A-Za-z_][A-Za-z0-9_]*\)\@<=\[\ze[A-Za-z_]" containedin=ALLBUT,@poshNotTop,poshVariable display
@@ -268,9 +268,9 @@ syntax region poshAttributeArgs           matchgroup=Delimiter start="(" end=")"
 syntax region poshAtributeNestedParen     matchgroup=Delimiter start="(" end=")" transparent keepend contained containedin=poshAttributeArgs,poshAttributeNestedParen contains=ALLBUT,poshAttributeArgsSeparator display
 syntax match  poshType                    "\%([A-Za-z0-9_$.]\)\@<!\[\%([A-Za-z_][A-Za-z0-9_]*\%(\.[A-Za-z_][A-Za-z0-9_]*\)*\)[A-Za-z0-9_., \[\]]*]" containedin=ALLBUT,@poshComments,@poshStrings,poshKeywords display
 
-syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" transparent keepend contained contains=ALLBUT,@poshNotTopInterpolation,poshNestedParentheses
-syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained containedin=poshInterpolation,poshNestedParentheses
-syntax region  poshInterpolationNestedParen matchgroup=poshParenthesesDelim start="(" end=")" transparent keepend contained containedin=poshInterpolation,poshInterpolationNestedParen contains=ALLBUT,@poshNotTopInterpolation
+syntax region  poshInterpolation matchgroup=poshInterpolationDelimiter start="\%(`\)\@<!\$(" end=")" transparent keepend contained contains=ALLBUT,@poshNotTopInterpolation
+syntax region  poshNestedParentheses start="(" skip="\\\\\|\\)" matchgroup=poshInterpolationDelimiter end=")" transparent contained containedin=poshInterpolation,poshNestedParentheses contains=ALLBUT,@poshNotTopInterpolation
+syntax region  poshInterpolationNestedParen matchgroup=poshParenthesesDelim start="(" end=")" transparent keepend contained containedin=poshInterpolation,poshInterpolationNestedParen
 syntax cluster poshStringSpecial contains=@poshEscapeSequences,poshInterpolation,poshVariable,@poshAutoVars,@poshPrefVars,@Spell
 
 syntax match poshAtSigil   "@{" containedin=ALLBUT,@poshNotTop,poshVariable display
