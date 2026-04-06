@@ -120,7 +120,7 @@ execute 'syntax match poshFunctionDeclNameConventional   "\%(\<\|:\)\zs' . s:pos
 
 " Function Invocation {{{1
 syntax match  poshCommandScope           "\<\%(global\|local\|script\|private\):" contained nextgroup=poshCommandNameConventional,poshCommandNameDash,poshCommandName display
-syntax match  poshCommandName            "\%(\%(global\|local\|script\|private\):\)\@!\%([A-Za-z_]\w*\%(-\i\+\)\?\)" contained contains=poshCommandNameConventional nextgroup=poshCommandArgs display
+syntax match  poshCommandName            "\%(\%(global\|local\|script\|private\):\)\@![A-Za-z_]\w*" contained contains=poshCommandNameConventional nextgroup=poshCommandArgs display
 syntax match  poshCommandNameDash        "\%(\%(global\|local\|script\|private\):\)\@![A-Za-z_]\w*-\i\+" contained contains=poshCommandNameConventional nextgroup=poshCommandArgs display
 execute 'syntax match  poshCommandNameConventional   "\<\%(' . s:posh_approved_verbs . '\|' . s:posh_reserved_verbs . '\)-\i\+" contained containedin=poshCommandName,poshCommandNameDash nextgroup=poshCommandArgs display'
 syntax match  poshCommandParamName       "-[A-Za-z_]\w*" contained containedin=poshCommandArgs,poshCommandArgsNestedParen display
